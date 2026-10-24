@@ -1,0 +1,39 @@
+<!-- SUBJECT: {{AI_SUBJECT}} -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{AI_SUBJECT}}</title>
+  <style>
+    body { margin:0; padding:24px 12px; background:#f1f5f9; font-family:Arial,Helvetica,sans-serif; color:#1e293b; }
+    .email { width:100%; max-width:600px; margin:0 auto; background:#fff; border-radius:10px; overflow:hidden; }
+    .content { padding:28px 32px; }
+    .label { margin:0 0 12px; color:#0A2E8A; font-size:12px; font-weight:bold; letter-spacing:.5px; text-transform:uppercase; }
+    h1 { margin:0 0 18px; color:#0A2E8A; font-size:24px; line-height:1.3; }
+    .message p { margin:0 0 14px; color:#334155; font-size:15px; line-height:1.7; }
+    .cta { display:inline-block; margin-top:4px; padding:13px 20px; border-radius:5px; background:#0A2E8A; color:#fff !important; font-size:14px; font-weight:bold; text-decoration:none; }
+    .footer { padding:20px 24px; background:#f8fafc; color:#64748b; font-size:12px; line-height:1.7; text-align:center; }
+    @media(max-width:480px) { body { padding:0; } .email { border-radius:0; } .content { padding:24px 18px; } h1 { font-size:21px; } }
+  </style>
+</head>
+<body>
+  <table role="presentation" class="email" cellpadding="0" cellspacing="0" border="0">
+    <tr><td>{{HEADER_BANNER}}</td></tr>
+    <tr><td class="content">
+      <p class="label">{{AI_MARKET_SEGMENT}}</p>
+      <h1>{{AI_SUBJECT}}</h1>
+      <div class="message">{{AI_EMAIL_BODY}}</div>
+      <a class="cta" href="mailto:{{CONTACT_EMAIL}}?subject={{AI_REPLY_SUBJECT}}">Reply to discuss site priorities</a>
+      <p style="margin:14px 0 0;color:#64748b;font-size:12px;">Prefer WhatsApp? <a href="https://wa.me/917708887878" style="color:#0A2E8A;">Ask a quick question</a>.</p>
+    </td></tr>
+    <tr><td class="footer">
+      <strong style="color:#0A2E8A;">{{COMPANY_NAME}}</strong><br>
+      {{CERTIFICATION}}<br>
+      {{ADDRESS}}<br>
+      <a href="{{WEBSITE}}" style="color:#0A2E8A;">{{WEBSITE}}</a> &nbsp;|&nbsp; {{CONTACT_PHONE}}
+    </td></tr>
+    <tr><td>{{FOOTER_BANNER}}</td></tr>
+  </table>
+</body>
+</html>

@@ -1,3 +1,10 @@
 .vercel
 raw/
 node_modules/
+email-campaign/.env
+email-campaign/.env.*
+email-campaign/node_modules/
+email-campaign/data/*.csv
+email-campaign/data/*.json
+email-campaign/logs/
+email-campaign/preview/

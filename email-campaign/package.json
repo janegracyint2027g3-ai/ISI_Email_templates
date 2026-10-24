@@ -1,0 +1,17 @@
+{
+  "name": "isi-email-campaign",
+  "version": "1.0.0",
+  "description": "ISI Security & Intelligence email marketing automation",
+  "main": "send.js",
+  "scripts": {
+    "start": "node send.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cohere-ai": "^7.13.2",
+    "dotenv": "^16.4.5",
+    "nodemailer": "^10.2.1",
+    "puppeteer": "^25.2.1"
+  },
+  "devDependencies": {}
+}
