@@ -25,6 +25,7 @@ APP_PASSWORD=your_gmail_app_password
 - `send.js` — entry point, iterates leads and orchestrates send
 - `config/email.js` — SMTP + company config (loads `.env`)
 - `services/cohereService.js` — Cohere AI content generation with fallback
+- `services/industryContext.js` — shared context for supported industries and a cautious custom-industry fallback
 - `services/templateService.js` — HTML template renderer
 - `services/emailService.js` — Nodemailer transport
 - `templates/customercentric.html` — concise, customer-focused email layout
@@ -49,7 +50,9 @@ The Cohere content generator uses `services/cohereService.js` to build a segment
 - `validatedImpactMetrics` or `impactEvidence` (include the evidence source), `differentiator` or `uvp`, and `proofPoints` or `evidence`
 - `criticalEvent` or `whyNow`, and verified `personalizationFacts`
 
-The model returns five subject options, a selected subject, a sub-125-word SPICED email, the exact sentence-to-SPICED mapping, and a campaign strategy with evidence gaps. Unsupported metrics, results, deadlines, and proof points must not be invented. Missing optional fields are treated as unknown rather than inferred. Existing template fields (`subject`, `hook`, `insight`, and `ctaNote`) remain available to the email renderer.
+The model returns five subject options, a selected subject, a sub-125-word SPICED email, the exact sentence-to-SPICED mapping, and a campaign strategy with evidence gaps. A Critical Event is included only when a verified event is supplied; otherwise it is omitted rather than fabricated. Unsupported metrics, results, deadlines, and proof points must not be invented. Missing optional fields are treated as unknown rather than inferred. Existing template fields (`subject`, `hook`, `insight`, and `ctaNote`) remain available to the email renderer.
+
+Industry context is shared across aerospace, BFSI, construction, education, healthcare, hospitality, IT/ITES, logistics, manufacturing, retail, and smart-city operations. It guides relevant roles, operating conditions, plausible physical-security concerns, reviewable KPIs, and existing ISI service categories. It is guidance, not a claim about an individual organization. Unmapped industries use general site-security context. This does not add template generation or multi-step campaign orchestration.
 
 Campaigns use the concise `templates/customercentric.html` layout by default, with the generated body rendered as short paragraphs and a reply-oriented CTA. To intentionally use a different existing HTML design for a specific lead, set its `templateFile` field to a template path relative to `templates/`.
 

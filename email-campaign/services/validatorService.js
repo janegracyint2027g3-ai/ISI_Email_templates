@@ -115,7 +115,7 @@ function validateContent(content, lead = {}, campaignType = "general") {
     }
   }
 
-  const spicedFields = ["situation", "pain", "impact", "criticalEvent", "decision"];
+  const spicedFields = ["situation", "pain", "impact", "decision"];
   for (const field of spicedFields) {
     const sentence = content.spicedBreakdown?.[field];
     if (typeof sentence !== "string" || !sentence.trim()) {
@@ -123,6 +123,19 @@ function validateContent(content, lead = {}, campaignType = "general") {
     } else if (body && !body.includes(sentence.trim())) {
       errors.push(`SPICED '${field}' must quote its exact sentence from the email body.`);
     }
+  }
+
+  const hasVerifiedCriticalEvent = [lead.criticalEvent, lead.whyNow]
+    .some((event) => typeof event === "string" && event.trim());
+  const criticalEvent = content.spicedBreakdown?.criticalEvent;
+  if (hasVerifiedCriticalEvent) {
+    if (typeof criticalEvent !== "string" || !criticalEvent.trim()) {
+      errors.push("SPICED breakdown must include the supplied critical event.");
+    } else if (body && !body.includes(criticalEvent.trim())) {
+      errors.push("SPICED 'criticalEvent' must quote its exact sentence from the email body.");
+    }
+  } else if (typeof criticalEvent === "string" && criticalEvent.trim()) {
+    errors.push("SPICED 'criticalEvent' must be omitted when no verified event was supplied.");
   }
 
   const impactSentence = content.spicedBreakdown?.impact || "";
