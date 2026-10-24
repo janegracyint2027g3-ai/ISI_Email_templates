@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ISI Security — Email Content Intelligence Evaluation Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f1f5f9; color: #1e293b; margin: 0; padding: 32px 20px; }
+    .wrapper { max-width: 1040px; margin: 0 auto; }
+    header { background: linear-gradient(135deg, #0A2E8A 0%, #061950 100%); color: #ffffff; padding: 32px; border-radius: 12px; margin-bottom: 28px; box-shadow: 0 10px 25px rgba(10,46,138,0.2); }
+    h1 { margin: 0 0 8px 0; font-size: 26px; font-weight: 800; }
+    .badge { display: inline-block; background: #16a34a; color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 14px; }
+
+    /* Mobile Responsive Optimizations */
+    @media (max-width: 860px) {
+      body { padding: 16px 10px !important; }
+      header { padding: 22px 16px !important; border-radius: 10px !important; margin-bottom: 20px !important; }
+      header > div { flex-direction: column !important; align-items: flex-start !important; gap: 14px !important; }
+      header > div > div:last-child { text-align: left !important; }
+      h1 { font-size: 20px !important; line-height: 28px !important; }
+      
+      div[style*="display:grid;grid-template-columns"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+      }
+
+      div[style*="box-shadow:0 4px 6px"] {
+        padding: 16px 12px !important;
+        border-radius: 8px !important;
+        margin-bottom: 20px !important;
+      }
+      
+      div[style*="border-bottom:1px solid #edf2f7"] {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+      }
+      div[style*="border-bottom:1px solid #edf2f7"] > div:last-child {
+        text-align: left !important;
+      }
+
+      /* Stack comparison table neatly on mobile */
+      table {
+        display: block !important;
+        width: 100% !important;
+        border: none !important;
+        margin-bottom: 16px !important;
+      }
+      thead {
+        display: none !important;
+      }
+      tbody {
+        display: block !important;
+        width: 100% !important;
+      }
+      tbody tr {
+        display: block !important;
+        width: 100% !important;
+        margin-bottom: 16px !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        background: #ffffff !important;
+        overflow: hidden !important;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+      }
+      tbody tr td {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 12px 14px !important;
+        border: none !important;
+        font-size: 13.5px !important;
+        line-height: 22px !important;
+        text-align: left !important;
+      }
+      tbody tr td:first-child {
+        background: #f1f5f9 !important;
+        font-weight: 800 !important;
+        color: #0A2E8A !important;
+        font-size: 13px !important;
+        letter-spacing: 0.5px !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+      }
+      tbody tr td:nth-child(2) {
+        background: #f8fafc !important;
+        color: #475569 !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+      }
+      tbody tr td:nth-child(2)::before {
+        content: "Legacy Baseline (Prior):";
+        display: block !important;
+        font-weight: 700 !important;
+        font-size: 11px !important;
+        color: #94a3b8 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 6px !important;
+      }
+      tbody tr td:nth-child(3) {
+        background: #f0fdf4 !important;
+        color: #0f172a !important;
+        border-bottom: none !important;
+      }
+      tbody tr td:nth-child(3)::before {
+        content: "Upgraded Cohere Intelligence:";
+        display: block !important;
+        font-weight: 700 !important;
+        font-size: 11px !important;
+        color: #15803d !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 6px !important;
+      }
+
+      /* Stack action bar */
+      div[style*="display:flex;justify-content:space-between;align-items:center;background:#f8fafc"] {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+      div[style*="display:flex;justify-content:space-between;align-items:center;background:#f8fafc"] a {
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <span class="badge">Safe Dry-Run Mode Active</span>
+          <h1 style="margin-top:12px;">ISI Security Email Content Intelligence Dashboard</h1>
+          <p style="margin:0;opacity:0.85;font-size:14px;">Evaluated using Cohere Model <code>command-r-plus-08-2024</code> across 7 enterprise recipient scenarios</p>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:12px;opacity:0.75;text-transform:uppercase;letter-spacing:1px;">Test Coverage</div>
+          <div style="font-size:32px;font-weight:800;color:#FFD700;">7 / 7</div>
+          <div style="font-size:12px;opacity:0.75;">Scenarios Passed</div>
+        </div>
+      </div>
+    </header>
+
+    <div style="background:#ffffff;padding:20px;border-radius:10px;margin-bottom:28px;border:1px solid #e2e8f0;">
+      <h3 style="margin:0 0 10px 0;font-size:16px;color:#0A2E8A;">Evaluation Rubric Weighting</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:10px;font-size:12px;">
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;border-left:3px solid #0A2E8A;">Personalization: <strong>25%</strong></div>
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;border-left:3px solid #0A2E8A;">Relevance: <strong>20%</strong></div>
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;border-left:3px solid #0A2E8A;">Professional Tone: <strong>15%</strong></div>
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;border-left:3px solid #0A2E8A;">Factual Accuracy: <strong>15%</strong></div>
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;border-left:3px solid #0A2E8A;">Clarity / Length: <strong>10%</strong></div>
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;border-left:3px solid #0A2E8A;">CTA Quality: <strong>10%</strong></div>
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;border-left:3px solid #0A2E8A;">Brand Integrity: <strong>5%</strong></div>
+      </div>
+    </div>
+
+    
+    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;padding:24px;margin-bottom:28px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:1px solid #edf2f7;padding-bottom:14px;">
+        <div>
+          <h2 style="margin:0 0 6px 0;color:#0A2E8A;font-size:18px;">1. New Enterprise Prospect</h2>
+          <div style="font-size:13px;color:#64748b;">
+            Recipient: <strong>Example Recipient 1</strong> &lt;recipient1@example.com&gt; |
+            Industry: <span style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">Logistics</span> |
+            Campaign: <span style="background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-weight:600;">welcome</span> |
+            Template: <code>promotionaltemplate.html</code>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:24px;font-weight:800;color:#0A2E8A;">99<span style="font-size:14px;color:#64748b;">/100</span></div>
+          <div>Grade: <strong>A</strong> <span style="background:#e6f4ea;color:#137333;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700;">+0 pts</span></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <span style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.5px;">Personalization Fields Leveraged:</span>
+        <span style="font-size:13px;color:#334155;">Name • Role / Title • Company • Industry • Facility Type • Relationship Status (new)</span>
+      </div>
+
+      <!-- Comparison Grid -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px;">
+        <thead>
+          <tr style="background:#f8fafc;text-align:left;">
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:18%;">Element</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#64748b;">Legacy Baseline (Prior)</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#0A2E8A;">Upgraded Cohere Intelligence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Subject Line</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Secure Your Business with ISI Security (Legacy Static Pool)</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:700;color:#0A2E8A;">ISO 9001:2015 Security Excellence for Example Logistics' Supply Chain Operations</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Opening Hook</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">I hope this message finds you well. As you manage your facility and operational security, having a certified partner is critical to minimizing risk and ensuring business continuity.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">Industrial Security & Intelligence (ISI Security) extends a warm welcome to Example Logistics Ltd. With over 30 years of experience, our ISO 9001:2015 certification underscores our commitment to quality and reliability in the security sector.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Security Insight</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">As a certified partner, we remain committed to reviewing facility layouts and implementing strict access logs, security checks, and 24/7 support to secure your operations.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">In the logistics industry, maintaining secure distribution hubs and warehouses is crucial. We understand the challenges of managing access control, ensuring perimeter security, and safeguarding valuable assets. Our manned guarding and electronic security solutions provide a robust defense, while our risk assessment expertise identifies vulnerabilities and ensures compliance with safety regulations.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Call to Action</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#c5221f;">We are offering a comprehensive 2-hour physical threat walkthrough at no cost. If you request a consultation now, our security coordinator will call you back within 2 hours to finalize the schedule.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#047857;font-weight:600;">We invite you to schedule an introductory consultation to explore how ISI Security can enhance your site's security posture and operational resilience.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Validation & Preview Link -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:12px 16px;border-radius:6px;border:1px solid #e2e8f0;">
+        <div style="font-size:13px;">
+          Validation Status: <strong style="color:#16a34a;">PASSED (0 Errors)</strong>
+          
+        </div>
+        <div>
+          <a href="./logistics_industry/template_comprehensive.html" target="_blank" style="background:#0A2E8A;color:#ffffff;text-decoration:none;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;">Open Related Email Template →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;padding:24px;margin-bottom:28px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:1px solid #edf2f7;padding-bottom:14px;">
+        <div>
+          <h2 style="margin:0 0 6px 0;color:#0A2E8A;font-size:18px;">2. Existing Client Retention</h2>
+          <div style="font-size:13px;color:#64748b;">
+            Recipient: <strong>Example Recipient 2</strong> &lt;recipient2@example.com&gt; |
+            Industry: <span style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">Hospitality</span> |
+            Campaign: <span style="background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-weight:600;">retention</span> |
+            Template: <code>template9.html</code>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:24px;font-weight:800;color:#0A2E8A;">99<span style="font-size:14px;color:#64748b;">/100</span></div>
+          <div>Grade: <strong>A</strong> <span style="background:#e6f4ea;color:#137333;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700;">+0 pts</span></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <span style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.5px;">Personalization Fields Leveraged:</span>
+        <span style="font-size:13px;color:#334155;">Name • Role / Title • Company • Industry • Facility Type • Relationship Status (existing)</span>
+      </div>
+
+      <!-- Comparison Grid -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px;">
+        <thead>
+          <tr style="background:#f8fafc;text-align:left;">
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:18%;">Element</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#64748b;">Legacy Baseline (Prior)</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#0A2E8A;">Upgraded Cohere Intelligence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Subject Line</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Thank You for Trusting ISI Security (Legacy Static Pool)</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:700;color:#0A2E8A;">ISI Security: Ensuring Guest Safety at Grand Heritage Resorts & Conventions</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Opening Hook</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Thank you for your ongoing partnership with ISI Security. We are proud to support the security of your facility and collaborate with your team to maintain high safety standards.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">At ISI Security, we are grateful for the trust placed in us by Grand Heritage Resorts & Conventions. Our commitment to your safety and security remains unwavering, as we strive to exceed your expectations.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Security Insight</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">In the hospitality sector, guest privacy, lobby access control, and prompt crisis handling are key elements of brand reputation. We advise implementing concierge-style security training to balance welcoming hospitality with absolute guest safety.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">In the hospitality industry, maintaining a secure environment for guests and staff is paramount. We understand the challenges of managing access control, especially during peak seasons, and the importance of emergency preparedness. Our manned guarding services, combined with electronic surveillance, ensure comprehensive coverage, allowing your team to focus on delivering exceptional guest experiences.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Call to Action</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#c5221f;">If you would like to review your current guard roster and logs, we can coordinate a quick 2-hour site review next week. Simply reach out to your account manager.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#047857;font-weight:600;">As we value your continued partnership, we invite you to schedule a review meeting to discuss any evolving security needs and ensure your resort remains a safe haven for all.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Validation & Preview Link -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:12px 16px;border-radius:6px;border:1px solid #e2e8f0;">
+        <div style="font-size:13px;">
+          Validation Status: <strong style="color:#16a34a;">PASSED (0 Errors)</strong>
+          
+        </div>
+        <div>
+          <a href="./hospitality_industry/template_event_security.html" target="_blank" style="background:#0A2E8A;color:#ffffff;text-decoration:none;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;">Open Related Email Template →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;padding:24px;margin-bottom:28px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:1px solid #edf2f7;padding-bottom:14px;">
+        <div>
+          <h2 style="margin:0 0 6px 0;color:#0A2E8A;font-size:18px;">3. Prospect with Known Industry & Plant Manager Role</h2>
+          <div style="font-size:13px;color:#64748b;">
+            Recipient: <strong>Example Recipient 3</strong> &lt;recipient3@example.com&gt; |
+            Industry: <span style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">Manufacturing</span> |
+            Campaign: <span style="background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-weight:600;">leadgen</span> |
+            Template: <code>promotionaltemplate.html</code>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:24px;font-weight:800;color:#0A2E8A;">98<span style="font-size:14px;color:#64748b;">/100</span></div>
+          <div>Grade: <strong>A</strong> <span style="background:#e6f4ea;color:#137333;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700;">+1 pts</span></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <span style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.5px;">Personalization Fields Leveraged:</span>
+        <span style="font-size:13px;color:#334155;">Name • Role / Title • Company • Industry • Facility Type • Relationship Status (new)</span>
+      </div>
+
+      <!-- Comparison Grid -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px;">
+        <thead>
+          <tr style="background:#f8fafc;text-align:left;">
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:18%;">Element</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#64748b;">Legacy Baseline (Prior)</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#0A2E8A;">Upgraded Cohere Intelligence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Subject Line</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Protect What Matters Most with ISI (Legacy Static Pool)</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:700;color:#0A2E8A;">Securing Manufacturing Excellence: ISI Security's 30+ Years of Expertise</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Opening Hook</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">I hope this message finds you well. As you manage your facility and operational security, having a certified partner is critical to minimizing risk and ensuring business continuity.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">Industrial Security & Intelligence (ISI Security), an ISO 9001:2015 certified enterprise, offers tailored security solutions to safeguard your manufacturing operations. With over three decades of experience, we understand the criticality of uninterrupted production and the unique challenges in your industry.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Security Insight</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Industrial plant and warehouse safety hinges on strict gate-pass checks and hazardous area access control. We recommend reinforcing inventory loss prevention audits and shift-worker safety patrols to minimize shrinkage.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">In the manufacturing sector, maintaining a secure environment is paramount to ensure smooth operations and worker safety. ISI Security specializes in comprehensive risk assessment, addressing access control, perimeter security, and emergency preparedness. Our manned guarding and electronic surveillance solutions are designed to mitigate unauthorized access, theft, and potential hazards, ensuring your facility's security and operational continuity.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Call to Action</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#c5221f;">We are offering a comprehensive 2-hour physical threat walkthrough at no cost. If you request a consultation now, our security coordinator will call you back within 2 hours to finalize the schedule.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#047857;font-weight:600;">Let's schedule a consultation to discuss how ISI Security can enhance the safety and efficiency of Example Manufacturing Ltd.'s operations.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Validation & Preview Link -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:12px 16px;border-radius:6px;border:1px solid #e2e8f0;">
+        <div style="font-size:13px;">
+          Validation Status: <strong style="color:#16a34a;">PASSED (0 Errors)</strong>
+          
+        </div>
+        <div>
+          <a href="./manufacturing_industry/template_comprehensive.html" target="_blank" style="background:#0A2E8A;color:#ffffff;text-decoration:none;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;">Open Related Email Template →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;padding:24px;margin-bottom:28px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:1px solid #edf2f7;padding-bottom:14px;">
+        <div>
+          <h2 style="margin:0 0 6px 0;color:#0A2E8A;font-size:18px;">4. Prospect with Only Name & Email</h2>
+          <div style="font-size:13px;color:#64748b;">
+            Recipient: <strong>Example Recipient 4</strong> &lt;recipient4@example.com&gt; |
+            Industry: <span style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">General</span> |
+            Campaign: <span style="background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-weight:600;">promotional</span> |
+            Template: <code>promotionaltemplate.html</code>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:24px;font-weight:800;color:#0A2E8A;">89<span style="font-size:14px;color:#64748b;">/100</span></div>
+          <div>Grade: <strong>B</strong> <span style="background:#fce8e6;color:#c5221f;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700;">-2 pts</span></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <span style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.5px;">Personalization Fields Leveraged:</span>
+        <span style="font-size:13px;color:#334155;">Name • Relationship Status (new)</span>
+      </div>
+
+      <!-- Comparison Grid -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px;">
+        <thead>
+          <tr style="background:#f8fafc;text-align:left;">
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:18%;">Element</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#64748b;">Legacy Baseline (Prior)</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#0A2E8A;">Upgraded Cohere Intelligence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Subject Line</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Professional Security Solutions for Your Organization (Legacy Static Pool)</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:700;color:#0A2E8A;">ISO 9001:2015 Certified Security Solutions for Enterprise Peace of Mind</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Opening Hook</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">I hope this message finds you well. As you manage your facility and operational security, having a certified partner is critical to minimizing risk and ensuring business continuity.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">Industrial Security & Intelligence (ISI Security) brings over three decades of expertise in safeguarding India's corporate landscape. Our ISO 9001:2015 certification underscores our commitment to quality and reliability in addressing your enterprise's security needs.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Security Insight</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">As a certified partner, we remain committed to reviewing facility layouts and implementing strict access logs, security checks, and 24/7 support to secure your operations.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">In today's complex business environment, ensuring the safety of your facilities and personnel is paramount. ISI Security specializes in comprehensive risk assessment, offering tailored solutions. Our manned guarding and electronic surveillance systems provide robust protection, while our background verification services ensure a trustworthy workforce, mitigating potential threats from within.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Call to Action</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#c5221f;">We are offering a comprehensive 2-hour physical threat walkthrough at no cost. If you request a consultation now, our security coordinator will call you back within 2 hours to finalize the schedule.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#047857;font-weight:600;">Experience our dedication to your security firsthand. We invite you to schedule a complimentary on-site assessment to explore how ISI Security can enhance your operational resilience.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Validation & Preview Link -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:12px 16px;border-radius:6px;border:1px solid #e2e8f0;">
+        <div style="font-size:13px;">
+          Validation Status: <strong style="color:#16a34a;">PASSED (0 Errors)</strong>
+          
+        </div>
+        <div>
+          <a href="./template1.html" target="_blank" style="background:#0A2E8A;color:#ffffff;text-decoration:none;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;">Open Related Email Template →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;padding:24px;margin-bottom:28px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:1px solid #edf2f7;padding-bottom:14px;">
+        <div>
+          <h2 style="margin:0 0 6px 0;color:#0A2E8A;font-size:18px;">5. Missing / Incomplete Recipient Data</h2>
+          <div style="font-size:13px;color:#64748b;">
+            Recipient: <strong>Example Recipient 5</strong> &lt;recipient5@example.com&gt; |
+            Industry: <span style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">General</span> |
+            Campaign: <span style="background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-weight:600;">business_value</span> |
+            Template: <code>promotionaltemplate.html</code>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:24px;font-weight:800;color:#0A2E8A;">88<span style="font-size:14px;color:#64748b;">/100</span></div>
+          <div>Grade: <strong>B</strong> <span style="background:#e6f4ea;color:#137333;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700;">+0 pts</span></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <span style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.5px;">Personalization Fields Leveraged:</span>
+        <span style="font-size:13px;color:#334155;">Relationship Status (new)</span>
+      </div>
+
+      <!-- Comparison Grid -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px;">
+        <thead>
+          <tr style="background:#f8fafc;text-align:left;">
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:18%;">Element</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#64748b;">Legacy Baseline (Prior)</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#0A2E8A;">Upgraded Cohere Intelligence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Subject Line</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Secure Your Business with ISI Security (Legacy Static Pool)</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:700;color:#0A2E8A;">Maximizing Business Continuity: Security Solutions for Enterprise Resilience</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Opening Hook</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">I hope this message finds you well. As you manage your facility and operational security, having a certified partner is critical to minimizing risk and ensuring business continuity.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">Industrial Security & Intelligence (ISI Security), an ISO 9001:2015 certified enterprise, offers over three decades of expertise in comprehensive security services tailored to your enterprise's unique needs.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Security Insight</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">As a certified partner, we remain committed to reviewing facility layouts and implementing strict access logs, security checks, and 24/7 support to secure your operations.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">In today's business landscape, ensuring uninterrupted operations is paramount. Our manned guarding and electronic security solutions are designed to proactively address access control, intrusion detection, and asset protection. By combining trained personnel with advanced surveillance systems, we minimize downtime, safeguard critical assets, and ensure your business remains secure and operational.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Call to Action</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#c5221f;">We are offering a comprehensive 2-hour physical threat walkthrough at no cost. If you request a consultation now, our security coordinator will call you back within 2 hours to finalize the schedule.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#047857;font-weight:600;">Let's schedule a consultation to discuss how ISI Security can enhance your enterprise's resilience through tailored security strategies.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Validation & Preview Link -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:12px 16px;border-radius:6px;border:1px solid #e2e8f0;">
+        <div style="font-size:13px;">
+          Validation Status: <strong style="color:#16a34a;">PASSED (0 Errors)</strong>
+          
+        </div>
+        <div>
+          <a href="./template1.html" target="_blank" style="background:#0A2E8A;color:#ffffff;text-decoration:none;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;">Open Related Email Template →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;padding:24px;margin-bottom:28px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:1px solid #edf2f7;padding-bottom:14px;">
+        <div>
+          <h2 style="margin:0 0 6px 0;color:#0A2E8A;font-size:18px;">6. Service-Specific: Corporate Investigation & Manpower</h2>
+          <div style="font-size:13px;color:#64748b;">
+            Recipient: <strong>Example Recipient 6</strong> &lt;recipient6@example.com&gt; |
+            Industry: <span style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">Finance</span> |
+            Campaign: <span style="background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-weight:600;">consultation</span> |
+            Template: <code>promotionaltemplate.html</code>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:24px;font-weight:800;color:#0A2E8A;">98<span style="font-size:14px;color:#64748b;">/100</span></div>
+          <div>Grade: <strong>A</strong> <span style="background:#e6f4ea;color:#137333;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700;">+0 pts</span></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <span style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.5px;">Personalization Fields Leveraged:</span>
+        <span style="font-size:13px;color:#334155;">Name • Role / Title • Company • Industry • Facility Type • Specific Service Focus • Relationship Status (new)</span>
+      </div>
+
+      <!-- Comparison Grid -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px;">
+        <thead>
+          <tr style="background:#f8fafc;text-align:left;">
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:18%;">Element</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#64748b;">Legacy Baseline (Prior)</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#0A2E8A;">Upgraded Cohere Intelligence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Subject Line</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Secure Your Business with ISI Security (Legacy Static Pool)</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:700;color:#0A2E8A;">Enhancing Example Financial Services' Security Posture: A Tailored Approach</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Opening Hook</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">I hope this message finds you well. As you manage your facility and operational security, having a certified partner is critical to minimizing risk and ensuring business continuity.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">Industrial Security & Intelligence (ISI Security), an ISO 9001:2015 certified enterprise, brings over three decades of expertise in safeguarding India's diverse sectors. We understand the criticality of security for Example Financial Services' operations.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Security Insight</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Financial branch security requires gold-standard vault protection and high-visibility lobby vigilance. We recommend conducting quarterly audits on alarm response links and cash transit procedures to remain compliant with security guidelines.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">In the finance industry, ensuring the integrity of personnel and operations is paramount. ISI Security specializes in comprehensive background verification and corporate investigation services, mitigating risks associated with insider threats, fraud, and non-compliance. Our discreet and thorough processes ensure a robust security foundation, enabling your organization to thrive with confidence.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Call to Action</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#c5221f;">We are offering a comprehensive 2-hour physical threat walkthrough at no cost. If you request a consultation now, our security coordinator will call you back within 2 hours to finalize the schedule.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#047857;font-weight:600;">Let's schedule a consultation to discuss how our tailored solutions can enhance your security posture, specifically addressing the unique challenges of your corporate towers and data processing centers.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Validation & Preview Link -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:12px 16px;border-radius:6px;border:1px solid #e2e8f0;">
+        <div style="font-size:13px;">
+          Validation Status: <strong style="color:#16a34a;">PASSED (0 Errors)</strong>
+          
+        </div>
+        <div>
+          <a href="./bfsi_industry/template_comprehensive.html" target="_blank" style="background:#0A2E8A;color:#ffffff;text-decoration:none;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;">Open Related Email Template →</a>
+        </div>
+      </div>
+    </div>
+    
+    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;padding:24px;margin-bottom:28px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:1px solid #edf2f7;padding-bottom:14px;">
+        <div>
+          <h2 style="margin:0 0 6px 0;color:#0A2E8A;font-size:18px;">7. Re-engagement Campaign</h2>
+          <div style="font-size:13px;color:#64748b;">
+            Recipient: <strong>Example Recipient 7</strong> &lt;recipient7@example.com&gt; |
+            Industry: <span style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">Infrastructure</span> |
+            Campaign: <span style="background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-weight:600;">reengagement</span> |
+            Template: <code>template11.html</code>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:24px;font-weight:800;color:#0A2E8A;">93<span style="font-size:14px;color:#64748b;">/100</span></div>
+          <div>Grade: <strong>A</strong> <span style="background:#fce8e6;color:#c5221f;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700;">-5 pts</span></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <span style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.5px;">Personalization Fields Leveraged:</span>
+        <span style="font-size:13px;color:#334155;">Name • Role / Title • Company • Industry • Facility Type • Relationship Status (lapsed)</span>
+      </div>
+
+      <!-- Comparison Grid -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px;">
+        <thead>
+          <tr style="background:#f8fafc;text-align:left;">
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:18%;">Element</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#64748b;">Legacy Baseline (Prior)</th>
+            <th style="padding:10px 14px;border:1px solid #e2e8f0;width:41%;color:#0A2E8A;">Upgraded Cohere Intelligence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Subject Line</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Protect What Matters Most with ISI (Legacy Static Pool)</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:700;color:#0A2E8A;">Enhancing Security Posture for Commercial IT Parks</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Opening Hook</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">I hope this message finds you well. As you manage your facility and operational security, having a certified partner is critical to minimizing risk and ensuring business continuity.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">Industrial Security & Intelligence (ISI Security), an ISO 9001:2015 certified enterprise, brings over three decades of expertise in physical and electronic security to the forefront of your operational needs.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Security Insight</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#64748b;">Public utility and infrastructure protection calls for robust access control auditing and 24/7 gate monitoring. We recommend reviewing multi-layered perimeter surveillance to safeguard critical community facilities.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#1e293b;">In the dynamic infrastructure sector, ensuring tenant safety and seamless daily operations is paramount. Our manned guarding services, combined with electronic security solutions, offer a comprehensive approach to access control, visitor management, and facility protection. We understand the challenges of maintaining a secure environment in commercial IT parks, and our tailored solutions address these concerns effectively.</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;font-weight:600;background:#fafafa;">Call to Action</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#c5221f;">We are offering a comprehensive 2-hour physical threat walkthrough at no cost. If you request a consultation now, our security coordinator will call you back within 2 hours to finalize the schedule.</td>
+            <td style="padding:10px 14px;border:1px solid #e2e8f0;color:#047857;font-weight:600;">Consider an introductory consultation to explore how ISI Security can enhance your security posture and operational efficiency.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Validation & Preview Link -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:12px 16px;border-radius:6px;border:1px solid #e2e8f0;">
+        <div style="font-size:13px;">
+          Validation Status: <strong style="color:#16a34a;">PASSED (0 Errors)</strong>
+          
+        </div>
+        <div>
+          <a href="./it_ites_industry/template_comprehensive.html" target="_blank" style="background:#0A2E8A;color:#ffffff;text-decoration:none;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;">Open Related Email Template →</a>
+        </div>
+      </div>
+    </div>
+    
+
+    <footer style="text-align:center;color:#64748b;font-size:12px;margin-top:40px;">
+      Industrial Security &amp; Intelligence (I) Pvt. Ltd. (ISI Security) • ISO 9001:2015 Enterprise Communications System
+    </footer>
+  </div>
+</body>
+</html>

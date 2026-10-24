@@ -1,0 +1,12 @@
+{
+  "name": "isi-email-templates-review",
+  "version": "1.0.0",
+  "description": "ISI Security Email Templates Review Portal",
+  "main": "index.html",
+  "scripts": {
+    "build-index": "node build-index.js",
+    "deploy": "node deploy.js",
+    "preview": "npx serve ."
+  },
+  "dependencies": {}
+}

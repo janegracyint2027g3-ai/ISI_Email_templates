@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISI Email Templates Review</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
+            color: #333;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 300px;
+            background: #0d1b2a;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 20px 18px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            flex-shrink: 0;
+        }
+
+        .sidebar-header h1 {
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .sidebar-header p {
+            color: #8899aa;
+            font-size: 0.75rem;
+            margin-top: 3px;
+        }
+
+        .sidebar-search {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
+
+        .sidebar-search input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.07);
+            color: #fff;
+            font-size: 0.82rem;
+            outline: none;
+        }
+
+        .sidebar-search input::placeholder { color: #556677; }
+        .sidebar-search input:focus { border-color: rgba(255,255,255,0.25); }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .sidebar-nav::-webkit-scrollbar { width: 4px; }
+        .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+
+        /* SECTION: General Templates */
+        .section-label {
+            padding: 8px 18px 6px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #4a90d9;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        /* INDUSTRY GROUPS */
+        .industry-group { margin-bottom: 2px; }
+
+        .industry-toggle {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 10px 18px;
+            cursor: pointer;
+            color: #c8d8e8;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: left;
+            transition: background 0.15s;
+            gap: 9px;
+        }
+
+        .industry-toggle:hover { background: rgba(255,255,255,0.06); }
+        .industry-toggle.active { background: rgba(72,145,225,0.1); color: #6ab4f5; }
+
+        .industry-toggle .ind-icon { font-size: 1rem; flex-shrink: 0; }
+        .industry-toggle .ind-name { flex: 1; }
+        .industry-toggle .arrow {
+            font-size: 0.6rem;
+            color: #445566;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+        .industry-toggle.open .arrow { transform: rotate(90deg); }
+
+        .industry-templates {
+            display: none;
+            padding: 0 0 4px 0;
+        }
+
+        .industry-templates.open { display: block; }
+
+        .template-btn {
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 8px 18px 8px 44px;
+            text-align: left;
+            color: #8899aa;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            border-left: 2px solid transparent;
+        }
+
+        .template-btn:hover {
+            color: #c8d8e8;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .template-btn.active {
+            color: #6ab4f5;
+            border-left-color: #4a90d9;
+            background: rgba(72,145,225,0.08);
+            font-weight: 600;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .preview-bar {
+            padding: 12px 20px;
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        .preview-info { display: flex; align-items: center; gap: 12px; }
+
+        .preview-industry-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: #e8f4fd;
+            color: #0369a1;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        .preview-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .preview-controls { display: flex; align-items: center; gap: 10px; }
+
+        .device-btn {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: #475569;
+            transition: all 0.15s;
+        }
+
+        .device-btn:hover { background: #e2e8f0; }
+        .device-btn.active { background: #1e293b; color: #fff; border-color: #1e293b; }
+
+        .open-new-btn {
+            background: #4a90d9;
+            color: #fff;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: background 0.15s;
+            text-decoration: none;
+        }
+
+        .open-new-btn:hover { background: #3679c0; }
+
+        .iframe-wrapper {
+            flex: 1;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            transition: width 0.3s ease;
+        }
+
+        iframe.mobile { width: 390px; max-width: 100%; }
+
+        /* General template list (not collapsible) */
+        .general-list {
+            padding: 0;
+            list-style: none;
+        }
+
+        .general-list li button {
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 8px 18px 8px 28px;
+            text-align: left;
+            color: #8899aa;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            border-left: 2px solid transparent;
+        }
+
+        .general-list li button:hover {
+            color: #c8d8e8;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .general-list li button.active {
+            color: #6ab4f5;
+            border-left-color: #4a90d9;
+            background: rgba(72,145,225,0.08);
+            font-weight: 600;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>ISI Email Templates</h1>
+            <p>Client Review Portal</p>
+        </div>
+        <div class="sidebar-search">
+            <input type="text" id="searchInput" placeholder="Search templates..." oninput="filterTemplates()" />
+        </div>
+        <nav class="sidebar-nav" id="sidebarNav">
+
+            <!-- INTELLIGENCE EVALUATION REPORT -->
+            <div class="section-label">Audit & Intelligence</div>
+            <ul class="general-list" style="margin-bottom: 8px;">
+                <li><button onclick="loadTemplate('preview_report.html','Intelligence Dashboard','Audit', this)" style="background: rgba(74, 144, 217, 0.18); color: #60a5fa; font-weight: bold; border: 1px solid rgba(74, 144, 217, 0.3);">📊 Intelligence Evaluation Dashboard</button></li>
+            </ul>
+
+            <div class="divider"></div>
+            <!-- GENERAL TEMPLATES -->
+            <div class="section-label">General Templates</div>
+            <ul class="general-list" id="generalList">
+                <li><button onclick="loadTemplate('promotionaltemplate.html','Promotional Offer','General', this)">Promotional Offer</button></li>
+                <li><button onclick="loadTemplate('template1.html','Enterprise Protection','General', this)">Enterprise Protection</button></li>
+                <li><button onclick="loadTemplate('template2.html','Secure Your Future','General', this)">Secure Your Future</button></li>
+                <li><button onclick="loadTemplate('template3.html','Comprehensive Solutions','General', this)">Comprehensive Solutions</button></li>
+                <li><button onclick="loadTemplate('template4.html','Implementation Process','General', this)">Implementation Process</button></li>
+                <li><button onclick="loadTemplate('template5.html','Specialized Solutions','General', this)">Specialized Solutions</button></li>
+                <li><button onclick="loadTemplate('template6.html','Enterprise Transformation','General', this)">Enterprise Transformation</button></li>
+                <li><button onclick="loadTemplate('template7.html','Security By the Numbers','General', this)">Security By the Numbers</button></li>
+                <li><button onclick="loadTemplate('template8.html','Upgrade Status Quo','General', this)">Upgrade Status Quo</button></li>
+                <li><button onclick="loadTemplate('template9.html','FAQ & Support','General', this)">FAQ & Support</button></li>
+                <li><button onclick="loadTemplate('template10.html','Secure Sentinel Newsletter','General', this)">Secure Sentinel Newsletter</button></li>
+                <li><button onclick="loadTemplate('template11.html','Important Security Alert','General', this)">Important Security Alert</button></li>
+                <li><button onclick="loadTemplate('template12.html','Elite Global Protection','General', this)">Elite Global Protection</button></li>
+            </ul>
+
+            <div class="divider"></div>
+            <div class="section-label">Industry Templates</div>
+
+            <!-- BFSI (Banking & Finance) -->
+            <div class="industry-group" data-industry="bfsi_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">🏦</span>
+                    <span class="ind-name">BFSI (Banking & Finance)</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('bfsi_industry/template_comprehensive.html','Comprehensive','BFSI', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('bfsi_industry/template_electronic_security.html','Electronic Security','BFSI', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('bfsi_industry/template_event_security.html','Event Security','BFSI', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('bfsi_industry/template_facility_management.html','Facility Management','BFSI', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('bfsi_industry/template_physical_security.html','Physical Security','BFSI', this)">Physical Security</button>
+                </div>
+            </div>
+
+            <!-- Manufacturing & Industrial -->
+            <div class="industry-group" data-industry="manufacturing_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">🏭</span>
+                    <span class="ind-name">Manufacturing & Industrial</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('manufacturing_industry/template_comprehensive.html','Comprehensive','Manufacturing', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('manufacturing_industry/template_electronic_security.html','Electronic Security','Manufacturing', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('manufacturing_industry/template_event_security.html','Event Security','Manufacturing', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('manufacturing_industry/template_facility_management.html','Facility Management','Manufacturing', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('manufacturing_industry/template_physical_security.html','Physical Security','Manufacturing', this)">Physical Security</button>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="industry-group" data-industry="education_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">🏫</span>
+                    <span class="ind-name">Education</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('education_industry/template_campus_security.html','Campus Security','Education', this)">Campus Security</button>
+                    <button class="template-btn" onclick="loadTemplate('education_industry/template_comprehensive.html','Comprehensive','Education', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('education_industry/template_electronic_security.html','Electronic Security','Education', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('education_industry/template_event_security.html','Event Security','Education', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('education_industry/template_facility_management.html','Facility Management','Education', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('education_industry/template_physical_security.html','Physical Security','Education', this)">Physical Security</button>
+                </div>
+            </div>
+
+            <!-- Hospitality & Events -->
+            <div class="industry-group" data-industry="hospitality_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">🏨</span>
+                    <span class="ind-name">Hospitality & Events</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('hospitality_industry/template_comprehensive.html','Comprehensive','Hospitality', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('hospitality_industry/template_electronic_security.html','Electronic Security','Hospitality', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('hospitality_industry/template_event_security.html','Event Security','Hospitality', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('hospitality_industry/template_facility_management.html','Facility Management','Hospitality', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('hospitality_industry/template_physical_security.html','Physical Security','Hospitality', this)">Physical Security</button>
+                </div>
+            </div>
+
+            <!-- Healthcare -->
+            <div class="industry-group" data-industry="healthcare_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">🏥</span>
+                    <span class="ind-name">Healthcare</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('healthcare_industry/template_comprehensive.html','Comprehensive','Healthcare', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('healthcare_industry/template_electronic_security.html','Electronic Security','Healthcare', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('healthcare_industry/template_event_security.html','Event Security','Healthcare', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('healthcare_industry/template_facility_management.html','Facility Management','Healthcare', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('healthcare_industry/template_physical_security.html','Physical Security','Healthcare', this)">Physical Security</button>
+                </div>
+            </div>
+
+            <!-- Logistics & Transportation -->
+            <div class="industry-group" data-industry="logistics_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">🚚</span>
+                    <span class="ind-name">Logistics & Transportation</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('logistics_industry/template_comprehensive.html','Comprehensive','Logistics', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('logistics_industry/template_electronic_security.html','Electronic Security','Logistics', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('logistics_industry/template_event_security.html','Event Security','Logistics', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('logistics_industry/template_facility_management.html','Facility Management','Logistics', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('logistics_industry/template_physical_security.html','Physical Security','Logistics', this)">Physical Security</button>
+                </div>
+            </div>
+
+            <!-- IT / ITES & GCC -->
+            <div class="industry-group" data-industry="it_ites_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">💻</span>
+                    <span class="ind-name">IT / ITES & GCC</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('it_ites_industry/template_comprehensive.html','Comprehensive','IT', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('it_ites_industry/template_electronic_security.html','Electronic Security','IT', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('it_ites_industry/template_event_security.html','Event Security','IT', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('it_ites_industry/template_facility_management.html','Facility Management','IT', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('it_ites_industry/template_physical_security.html','Physical Security','IT', this)">Physical Security</button>
+                </div>
+            </div>
+
+            <!-- Aerospace -->
+            <div class="industry-group" data-industry="aerospace_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">✈️</span>
+                    <span class="ind-name">Aerospace</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('aerospace_industry/template_comprehensive.html','Comprehensive','Aerospace', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('aerospace_industry/template_electronic_security.html','Electronic Security','Aerospace', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('aerospace_industry/template_event_security.html','Event Security','Aerospace', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('aerospace_industry/template_facility_management.html','Facility Management','Aerospace', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('aerospace_industry/template_physical_security.html','Physical Security','Aerospace', this)">Physical Security</button>
+                </div>
+            </div>
+
+            <!-- Retail -->
+            <div class="industry-group" data-industry="retail_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">🛍️</span>
+                    <span class="ind-name">Retail</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('retail_industry/template_comprehensive.html','Comprehensive','Retail', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('retail_industry/template_electronic_security.html','Electronic Security','Retail', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('retail_industry/template_event_security.html','Event Security','Retail', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('retail_industry/template_facility_management.html','Facility Management','Retail', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('retail_industry/template_physical_security.html','Physical Security','Retail', this)">Physical Security</button>
+                </div>
+            </div>
+
+            <!-- Smart Cities -->
+            <div class="industry-group" data-industry="smart_cities_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">🏙️</span>
+                    <span class="ind-name">Smart Cities</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('smart_cities_industry/template_comprehensive.html','Comprehensive','Smart', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('smart_cities_industry/template_electronic_security.html','Electronic Security','Smart', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('smart_cities_industry/template_event_security.html','Event Security','Smart', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('smart_cities_industry/template_facility_management.html','Facility Management','Smart', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('smart_cities_industry/template_physical_security.html','Physical Security','Smart', this)">Physical Security</button>
+                </div>
+            </div>
+
+            <!-- Construction -->
+            <div class="industry-group" data-industry="construction_industry">
+                <button class="industry-toggle" onclick="toggleGroup(this)">
+                    <span class="ind-icon">🏗️</span>
+                    <span class="ind-name">Construction</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="industry-templates">
+                    <button class="template-btn" onclick="loadTemplate('construction_industry/template_comprehensive.html','Comprehensive','Construction', this)">Comprehensive</button>
+                    <button class="template-btn" onclick="loadTemplate('construction_industry/template_electronic_security.html','Electronic Security','Construction', this)">Electronic Security</button>
+                    <button class="template-btn" onclick="loadTemplate('construction_industry/template_event_security.html','Event Security','Construction', this)">Event Security</button>
+                    <button class="template-btn" onclick="loadTemplate('construction_industry/template_facility_management.html','Facility Management','Construction', this)">Facility Management</button>
+                    <button class="template-btn" onclick="loadTemplate('construction_industry/template_physical_security.html','Physical Security','Construction', this)">Physical Security</button>
+                </div>
+            </div>
+
+</nav>
+    </div>
+
+    <!-- MAIN PREVIEW -->
+    <div class="main-content">
+        <div class="preview-bar">
+            <div class="preview-info">
+                <span class="preview-industry-badge" id="previewBadge">General</span>
+                <span class="preview-title" id="previewTitle">Promotional Template</span>
+            </div>
+            <div class="preview-controls">
+                <button class="device-btn active" onclick="setDevice('desktop', this)">🖥 Desktop</button>
+                <button class="device-btn" onclick="setDevice('mobile', this)">📱 Mobile</button>
+                <a id="openNewTabBtn" class="open-new-btn" href="promotionaltemplate.html" target="_blank">Open ↗</a>
+            </div>
+        </div>
+        <div class="iframe-wrapper">
+            <iframe id="templateFrame" src="promotionaltemplate.html" title="Email Template Preview"></iframe>
+        </div>
+    </div>
+
+    <script>
+        let currentSrc = 'promotionaltemplate.html';
+
+        function loadTemplate(url, title, industry, btn) {
+            currentSrc = url;
+            document.getElementById('templateFrame').src = url;
+            document.getElementById('previewTitle').innerText = title;
+            document.getElementById('previewBadge').innerText = industry;
+            document.getElementById('openNewTabBtn').href = url;
+
+            // Clear all active states
+            document.querySelectorAll('.template-btn, .general-list button').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+        }
+
+        function toggleGroup(btn) {
+            const group = btn.closest('.industry-group');
+            const list = group.querySelector('.industry-templates');
+            const isOpen = list.classList.contains('open');
+
+            // Close all other groups
+            document.querySelectorAll('.industry-templates.open').forEach(el => el.classList.remove('open'));
+            document.querySelectorAll('.industry-toggle.open').forEach(el => el.classList.remove('open'));
+
+            if (!isOpen) {
+                list.classList.add('open');
+                btn.classList.add('open');
+            }
+        }
+
+        function setDevice(type, btn) {
+            const frame = document.getElementById('templateFrame');
+            frame.classList.toggle('mobile', type === 'mobile');
+            document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function filterTemplates() {
+            const q = document.getElementById('searchInput').value.toLowerCase().trim();
+            const nav = document.getElementById('sidebarNav');
+
+            if (!q) {
+                // Reset: show all, close all groups
+                document.querySelectorAll('.industry-group').forEach(g => g.style.display = '');
+                document.querySelectorAll('.template-btn').forEach(b => b.style.display = '');
+                document.querySelectorAll('.general-list li').forEach(li => li.style.display = '');
+                document.querySelectorAll('.industry-templates').forEach(el => { el.classList.remove('open'); });
+                document.querySelectorAll('.industry-toggle').forEach(el => { el.classList.remove('open'); });
+                return;
+            }
+
+            // Filter general
+            document.querySelectorAll('.general-list li').forEach(li => {
+                li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none';
+            });
+
+            // Filter industry groups
+            document.querySelectorAll('.industry-group').forEach(group => {
+                const industryName = group.querySelector('.ind-name').textContent.toLowerCase();
+                const templateBtns = group.querySelectorAll('.template-btn');
+                let anyVisible = false;
+
+                templateBtns.forEach(btn => {
+                    const matches = btn.textContent.toLowerCase().includes(q) || industryName.includes(q);
+                    btn.style.display = matches ? '' : 'none';
+                    if (matches) anyVisible = true;
+                });
+
+                if (anyVisible) {
+                    group.style.display = '';
+                    group.querySelector('.industry-templates').classList.add('open');
+                    group.querySelector('.industry-toggle').classList.add('open');
+                } else {
+                    group.style.display = 'none';
+                }
+            });
+        }
+
+        // Auto-load first template
+        window.onload = () => {
+            const firstBtn = document.querySelector('.general-list button');
+            if (firstBtn) firstBtn.classList.add('active');
+        };
+    </script>
+</body>
+</html>
