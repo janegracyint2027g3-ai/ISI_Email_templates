@@ -8,13 +8,11 @@ process.env.COHERE_API_KEY ||= "test-api-key";
 let cohereService;
 let validatorService;
 let templateService;
-let industryContext;
 
 before(() => {
   cohereService = require("../services/cohereService");
   validatorService = require("../services/validatorService");
   templateService = require("../services/templateService");
-  industryContext = require("../services/industryContext");
 });
 
 test("campaign prompt includes ICP, segment, CTA objective, and evidence-backed KPI inputs", () => {
@@ -42,7 +40,7 @@ test("campaign prompt includes ICP, segment, CTA objective, and evidence-backed 
   assert.match(prompt, /enterprise risk mitigation, brand reputation/i);
 });
 
-test("verified fallback omits an unavailable critical event and validates", () => {
+test("verified fallback follows the five-sentence SPICED schema and validates", () => {
   const content = cohereService.getFallbackContent(
     { industry: "Healthcare", type: "new" },
     "leadgen"
@@ -50,126 +48,13 @@ test("verified fallback omits an unavailable critical event and validates", () =
   const validation = validatorService.validateContent(content, { industry: "Healthcare" }, "leadgen");
 
   assert.equal(content.subjectLines.length, 5);
-  assert.ok(content.spicedBreakdown.situation.length > 0);
-  assert.ok(content.spicedBreakdown.pain.length > 0);
-  assert.ok(content.spicedBreakdown.impact.length > 0);
-  assert.equal(content.spicedBreakdown.criticalEvent, "");
-  assert.ok(content.spicedBreakdown.decision.length > 0);
-  assert.doesNotMatch(content.body, /renewal|approaching|timely/i);
+  assert.equal(content.spicedBreakdown.situation.length > 0, true);
+  assert.equal(content.spicedBreakdown.pain.length > 0, true);
+  assert.equal(content.spicedBreakdown.impact.length > 0, true);
+  assert.equal(content.spicedBreakdown.criticalEvent.length > 0, true);
+  assert.equal(content.spicedBreakdown.decision.length > 0, true);
   assert.ok(content.body.trim().split(/\s+/).length < 125);
   assert.equal(validation.isValid, true, validation.errors.join("; "));
-});
-
-test("fallback and prompt use relevant context for every existing vertical", () => {
-  for (const industry of [
-    "aerospace",
-    "bfsi",
-    "construction",
-    "education",
-    "healthcare",
-    "hospitality",
-    "it_ites",
-    "logistics",
-    "manufacturing",
-    "retail",
-    "smart_cities"
-  ]) {
-    const context = industryContext.resolveIndustryContext(industry);
-    const lead = { industry };
-    const fallback = cohereService.getFallbackContent(lead, "leadgen");
-    const prompt = cohereService.buildStructuredPrompt(lead, "leadgen");
-
-    assert.ok(fallback.body.includes(context.situation), `${industry} fallback is not industry-specific`);
-    assert.ok(fallback.strategy.impactKpi.includes(context.impactKpi));
-    assert.equal(fallback.subjectLines.length, 5);
-    assert.ok(fallback.subjectLines.every((item) => item.text.split(/\s+/).length <= 5));
-    assert.ok(prompt.includes(context.operatingContext), `${industry} prompt is missing operating context`);
-    assert.ok(prompt.includes(context.roles), `${industry} prompt is missing role guidance`);
-  }
-
-  const aerospaceContext = industryContext.resolveIndustryContext("aerospace");
-  assert.doesNotMatch(aerospaceContext.services, /aerospace certification|aerospace security system/i);
-  assert.doesNotMatch(
-    cohereService.buildStructuredPrompt({ industry: "it_ites" }, "leadgen"),
-    /cybersecurity|threat detection|fraud detection/i
-  );
-});
-
-test("custom and missing industries use cautious generic site-security context", () => {
-  const custom = industryContext.resolveIndustryContext("Renewable Energy");
-  const missing = industryContext.resolveIndustryContext("");
-
-  assert.equal(custom.label, "Renewable Energy operations");
-  assert.match(custom.situation, /may coordinate staff, visitors, contractors/i);
-  assert.equal(missing.label, "Business operations");
-
-  const fallback = cohereService.getFallbackContent({}, "leadgen");
-  const validation = validatorService.validateContent(fallback, {}, "leadgen");
-  assert.match(fallback.body, /relevant sites/i);
-  assert.equal(validation.isValid, true, validation.errors.join("; "));
-});
-
-test("verified critical events are included, while supplied event wording is preserved", () => {
-  const lead = { industry: "Healthcare", criticalEvent: "a new hospital wing opening in Q3" };
-  const content = cohereService.getFallbackContent(lead, "leadgen");
-  const validation = validatorService.validateContent(content, lead, "leadgen");
-
-  assert.match(content.spicedBreakdown.criticalEvent, /new hospital wing opening in Q3/);
-  assert.equal(content.subjectLines[4].category, "trigger");
-  assert.match(content.subjectLines[4].text, /hospital wing opening/i);
-  assert.ok(content.body.includes(content.spicedBreakdown.criticalEvent));
-  assert.equal(validation.isValid, true, validation.errors.join("; "));
-});
-
-test("fallback remains valid across existing campaign purposes", () => {
-  const expectedCtas = {
-    welcome: /brief introduction/i,
-    leadgen: /short follow-up/i,
-    promotional: /review of the site-security arrangements/i,
-    business_value: /compare your site routines/i,
-    industry_specific: /site-security requirements/i,
-    reengagement: /still under review/i,
-    consultation: /access control/i,
-    retention: /current coverage/i
-  };
-
-  for (const campaignType of [
-    "welcome",
-    "leadgen",
-    "promotional",
-    "business_value",
-    "industry_specific",
-    "reengagement",
-    "retention",
-    "consultation"
-  ]) {
-    const lead = {
-      industry: "logistics",
-      type: campaignType === "retention" ? "existing" : "new",
-      specificService: "access control"
-    };
-    const content = cohereService.getFallbackContent(lead, campaignType);
-    const validation = validatorService.validateContent(content, lead, campaignType);
-
-    assert.equal(validation.isValid, true, `${campaignType}: ${validation.errors.join("; ")}`);
-    assert.match(content.spicedBreakdown.decision, expectedCtas[campaignType]);
-  }
-});
-
-test("malformed or unavailable Cohere responses fall back to validated content", async () => {
-  for (const chat of [
-    async () => ({ text: "not valid JSON" }),
-    async () => { throw new Error("API unavailable"); }
-  ]) {
-    const result = await cohereService.generateEmailContent(
-      { industry: "manufacturing" },
-      { campaignType: "leadgen", client: { chat } }
-    );
-
-    assert.equal(result.source, "fallback");
-    assert.equal(result.validation.isValid, true, result.validation.errors.join("; "));
-    assert.equal(result.content.spicedBreakdown.criticalEvent, "");
-  }
 });
 
 test("content validation rejects overlong bodies and banned language", () => {

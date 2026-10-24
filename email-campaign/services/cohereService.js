@@ -7,7 +7,6 @@
 const { CohereClient } = require("cohere-ai");
 const config = require("../config/email");
 const { cleanGeneratedText, validateContent } = require("./validatorService");
-const { resolveIndustryContext } = require("./industryContext");
 
 const cohere = new CohereClient({ token: config.cohereApiKey });
 
@@ -104,7 +103,6 @@ function resolveCampaignType(lead, explicitCampaign) {
  */
 function buildStructuredPrompt(lead, campaignType) {
   const audienceGuidance = resolveAudienceGuidance(lead);
-  const industryContext = resolveIndustryContext(lead.industry || lead.marketSegment || lead.customerSegment);
   const campaignObjective = CAMPAIGN_OBJECTIVES[campaignType] || CAMPAIGN_OBJECTIVES.promotional;
   const field = (value, fallback = "Not provided; do not assume.") =>
     typeof value === "string" && value.trim() ? value.trim() : fallback;
@@ -144,11 +142,6 @@ Verified Personalization Facts: ${field(lead.personalizationFacts)}
 RECIPIENT CONTEXT:
 ${recipientProfile.join("\n")}
 
-INDUSTRY CONTEXT (GUIDANCE, NOT ASSUMPTION):
-${JSON.stringify(industryContext)}
-Relevant decision-maker roles may include: ${industryContext.roles}.
-Use this as a starting point only. Do not imply that every organization in the industry has these conditions; qualify observations and follow supplied recipient facts.
-
 TARGET AUDIENCE GUIDANCE:
 ${audienceGuidance}
 
@@ -156,15 +149,14 @@ STRATEGY:
 - Frame the message for this market segment, ICP, target role, campaign objective, and CTA objective; avoid a generic service pitch.
 - Select one relevant, measurable operational KPI and explain briefly why it matters. A KPI is not a result: do not invent a baseline, target, savings, percentage, or customer outcome.
 - State numerical impact only when a validated value and evidence source are supplied. If they are not, describe the potential consequence qualitatively and name the evidence needed in "evidenceGaps".
-- Use only the supplied critical event for urgency. If none is supplied, omit the Critical Event sentence and set spicedBreakdown.criticalEvent to an empty string; do not manufacture a reason to act now.
+- Use only the supplied critical event for urgency. If none is supplied, use a conditional operational review as a neutral reason to consider the topic now; do not imply a real deadline or event.
 - Never invent role-specific facts, customer names, regulations, market shifts, proof points, guarantees, or performance data.
 
 EMAIL REQUIREMENTS:
 - The email body MUST be under 125 words. Use short paragraphs and no bolding.
-- Aim for 70-110 words when suitable without adding unsupported detail.
 - Tone: authoritative, respectful, peer-to-peer; no marketing fluff.
 - Do not use these words: Unlock, Transform, Accelerate, Synergy, Game-changer, Delve.
-- Integrate one concise sentence for each available SPICED element: Situation, Pain, Impact, and Decision/CTA; include Critical Event only when a verified event is supplied. Do not put SPICED labels in the email.
+- Integrate exactly one sentence for each SPICED element: Situation, Pain, Impact, Critical Event, Decision/CTA. Do not put SPICED labels in the email.
 - Keep "hook" equal to the Situation and Pain sentences, "insight" equal to the Impact and Critical Event sentences, and "ctaNote" equal to the Decision/CTA sentence. These fields must use the exact sentences from "body" so current email templates remain compatible.
 - Do not ask for 30 minutes. Match the CTA to the supplied CTA objective; make it low-friction.
 
@@ -192,14 +184,14 @@ OUTPUT ONLY RAW JSON with exactly these keys:
     "situation": "exact Situation sentence from body",
     "pain": "exact Pain sentence from body",
     "impact": "exact Impact sentence from body",
-    "criticalEvent": "exact Critical Event sentence from body, or an empty string when no verified event was supplied",
+    "criticalEvent": "exact Critical Event sentence from body",
     "decision": "exact Decision/CTA sentence from body"
   },
   "hook": "Situation sentence followed by Pain sentence",
   "insight": "Impact sentence followed by Critical Event sentence",
   "ctaNote": "Decision/CTA sentence"
 }
-Use category "direct_metric" only when the subject is supported by a supplied, validated metric; otherwise use "direct_pain" for both direct options. If no critical event is supplied, use "operational_question" for the fifth subject and phrase it as a question about the relevant site operation, not a fabricated trigger.
+Use category "direct_metric" only when the subject is supported by a supplied, validated metric; otherwise use "direct_pain" for both direct options. If no critical event is supplied, use "operational_question" for the fifth subject and phrase it as a question.
 `.trim();
 }
 
@@ -208,38 +200,20 @@ Use category "direct_metric" only when the subject is supported by a supplied, v
  */
 function getFallbackContent(lead, campaignType = "promotional") {
   const isExisting = lead.type === "existing" || campaignType === "retention";
-  const industryContext = resolveIndustryContext(lead.industry || lead.marketSegment || lead.customerSegment);
-  const situation = industryContext.situation;
-  const pain = `A practical concern is that ${industryContext.pain}.`;
-  const impactKpi = lead.impactKpi || lead.kpi || industryContext.impactKpi;
-  const impact = `Reviewing ${impactKpi} against your own site records can help show where closer attention may be useful.`;
-  const rawEvent = typeof (lead.criticalEvent || lead.whyNow) === "string"
-    ? (lead.criticalEvent || lead.whyNow).trim().replace(/\s+/g, " ")
-    : "";
-  const event = rawEvent.split(/\s+/).slice(0, 16).join(" ");
-  const criticalEvent = event
-    ? `With ${event}, this may be a timely point to review the relevant site-security arrangements.`
-    : "";
-  const ctaByCampaign = {
-    welcome: "Would you be open to a brief introduction about physical security at your sites?",
-    leadgen: "Would a short follow-up on your site's access and coverage priorities be useful?",
-    promotional: "Would a review of the site-security arrangements at one facility be useful?",
-    business_value: "Would it help to compare your site routines and security handover measures?",
-    industry_specific: "Would a brief exchange about these site-security requirements be useful?",
-    reengagement: "Are physical-security priorities at your sites still under review?",
-    consultation: `Would a short discussion about ${lead.specificService || lead.service || "site security"} be useful?`
-  };
+  const industry = lead.industry || lead.marketSegment || "enterprise";
+  const situation = isExisting
+    ? `For ${industry} organizations, site security needs can change as operations evolve.`
+    : `For ${industry} organizations, consistent site security supports safe, reliable operations.`;
+  const pain = "Access gaps or inconsistent shift handovers can make site coverage harder to manage.";
+  const impact = "These gaps can affect incident frequency and response time, metrics worth reviewing against your own site data.";
+  const criticalEvent = lead.criticalEvent || lead.whyNow
+    ? `With ${lead.criticalEvent || lead.whyNow}, it may be timely to review the relevant site controls.`
+    : "If a site review or contract renewal is approaching, it can be a practical time to check coverage.";
   const decision = isExisting
     ? "Would a brief review of current coverage or upcoming site needs be useful?"
-    : ctaByCampaign[campaignType] || ctaByCampaign.promotional;
-  const triggerTerms = event
-    .replace(/[^a-z0-9\s-]/gi, " ")
-    .split(/\s+/)
-    .filter((word) => word && !/^(?:a|an|and|at|by|for|in|of|on|or|the|to|with)$/i.test(word))
-    .slice(0, 4);
-  const triggerSubject = triggerTerms.length
-    ? `${triggerTerms.join(" ").replace(/^./, (first) => first.toUpperCase())}?`
-    : "Reviewing site access?";
+    : campaignType === "reengagement"
+      ? "Are site-security priorities on your agenda this quarter?"
+      : "Would a short exchange about your site's security priorities be useful?";
   const spicedBreakdown = {
     situation,
     pain,
@@ -252,9 +226,9 @@ function getFallbackContent(lead, campaignType = "promotional") {
     { category: "direct_pain", text: "Reviewing Shift Coverage Risks" },
     { category: "peer_to_peer", text: "A question on site coverage" },
     { category: "peer_to_peer", text: "How are site reviews going?" },
-    { category: event && triggerTerms.length ? "trigger" : "operational_question", text: triggerSubject }
+    { category: "operational_question", text: "Reviewing site controls soon?" }
   ];
-  const body = [situation, pain, impact, criticalEvent, decision].filter(Boolean).join("\n\n");
+  const body = Object.values(spicedBreakdown).join("\n\n");
   const objective = CAMPAIGN_OBJECTIVES[campaignType] || CAMPAIGN_OBJECTIVES.promotional;
   const ctaObjective = CAMPAIGN_CTA_OBJECTIVES[campaignType];
 
@@ -266,11 +240,11 @@ function getFallbackContent(lead, campaignType = "promotional") {
       icp: lead.icp || lead.icpDescription || "Not provided",
       campaignObjective: lead.campaignObjective || objective,
       ctaObjective: lead.ctaObjective || ctaObjective,
-      messageFraming: `Connect ${industryContext.label.toLowerCase()} site routines to practical physical-security concerns without assuming they apply to every organization.`,
-      impactKpi,
+      messageFraming: "Connect site access and shift coverage to incident frequency and response-time visibility without asserting results.",
+      impactKpi: lead.impactKpi || lead.kpi || "Incident frequency and response time",
       evidenceGaps: lead.validatedImpactMetrics || lead.impactEvidence
         ? "Validate the supplied metric and evidence source before making a quantified claim."
-        : `No validated baseline or outcome supplied; review the organization's own records for ${impactKpi} before quantifying impact.`
+        : "No validated baseline or outcome supplied; quantify impact only after reviewing site data."
     },
     body,
     spicedBreakdown,
@@ -342,7 +316,6 @@ function parseCohereResponse(rawText) {
 async function generateEmailContent(lead, options = {}) {
   const campaignType = resolveCampaignType(lead, options.campaignType);
   const prompt = buildStructuredPrompt(lead, campaignType);
-  const client = options.client || cohere;
 
   let attempts = 0;
   const maxAttempts = 2;
@@ -351,7 +324,7 @@ async function generateEmailContent(lead, options = {}) {
   while (attempts < maxAttempts) {
     attempts++;
     try {
-      const response = await client.chat({
+      const response = await cohere.chat({
         model: config.cohereModel,
         message: prompt,
         temperature: 0.25, // Deterministic for high consistency
