@@ -1,170 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AI Yard Surveillance & ANPR Camera Systems for Warehouses | ISI Security</title>
-<style type="text/css">
-  body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-  table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-  img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
-  table { border-collapse: collapse !important; }
-  body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; }
-  
-  /* Mobile Responsive Perfection */
-  @media screen and (max-width: 600px) {
-    body { padding: 0 !important; background-color: #f8fafc !important; }
-    .outer-table { padding: 4px 0 !important; }
-    .container { width: 100% !important; max-width: 100% !important; border-radius: 0 !important; box-shadow: none !important; }
-    .content-pad { padding: 20px 16px !important; }
-    .hero-h1 { font-size: 19px !important; line-height: 26px !important; text-align: left !important; margin-bottom: 12px !important; }
-    .salutation { font-size: 14.5px !important; line-height: 22px !important; margin-bottom: 12px !important; }
-    p, td, div { text-align: left !important; }
-    
-    .badge-bar { padding: 8px 12px !important; }
-    .badge-bar p { font-size: 11px !important; line-height: 16px !important; letter-spacing: 0.4px !important; text-align: center !important; }
-
-    .stat-box { padding: 12px 14px !important; margin-bottom: 12px !important; }
-    .stat-box p { font-size: 13px !important; line-height: 20px !important; text-align: left !important; }
-
-    .cards-td { display: block !important; width: 100% !important; }
-    table.card { width: 100% !important; max-width: 100% !important; float: none !important; display: block !important; margin: 0 0 14px 0 !important; clear: both !important; }
-    .card-inner-td { padding: 16px 14px !important; text-align: left !important; }
-    table.card h3 { text-align: left !important; font-size: 15px !important; }
-    table.card p { text-align: left !important; font-size: 13px !important; line-height: 20px !important; }
-
-    .btn-table { width: 100% !important; display: block !important; max-width: 100% !important; }
-    .btn-table tbody, .btn-table tr { display: block !important; width: 100% !important; }
-    .btn-td { display: block !important; width: 100% !important; margin-bottom: 10px !important; box-sizing: border-box !important; }
-    .btn-spacer { display: none !important; width: 0 !important; height: 0 !important; }
-    .btn { display: block !important; width: 100% !important; box-sizing: border-box !important; text-align: center !important; padding: 14px 16px !important; font-size: 14px !important; }
-
-    .faq-section { padding: 18px 16px !important; }
-    .faq-title { font-size: 15px !important; margin-bottom: 12px !important; text-align: left !important; }
-    .faq-details { padding: 10px 12px !important; margin-bottom: 8px !important; }
-    .faq-details summary { font-size: 13px !important; line-height: 18px !important; }
-    .faq-details p { font-size: 13px !important; line-height: 20px !important; text-align: left !important; }
-
-    .footer-cell { padding: 20px 16px !important; }
-  }
-
-  .container { transition: transform 0.3s ease, box-shadow 0.3s ease !important; }
-  .container:hover { box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important; }
-  .btn { transition: transform 0.2s ease, filter 0.2s ease !important; }
-  .btn:hover { transform: translateY(-2px) !important; filter: brightness(108%) !important; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reviewing Security Alerts for warehouse, distribution, and supply-chain operations.">
+  <title>Reviewing Security Alerts | ISI Security</title>
+  <style>
+    body { margin:0; padding:24px 12px; background:#f1f5f9; font-family:Arial,Helvetica,sans-serif; color:#1e293b; }
+    .email { width:100%; max-width:600px; margin:0 auto; background:#fff; border-radius:10px; overflow:hidden; }
+    .content { padding:28px 32px; }
+    .label { color:#0f4c81; font-size:12px; font-weight:bold; letter-spacing:.5px; text-transform:uppercase; margin:0 0 12px; }
+    h1 { margin:0 0 18px; color:#0f4c81; font-size:25px; line-height:1.3; }
+    .kpi { margin:18px 0; padding:14px 16px; border-left:4px solid #0f4c81; background:#f8fafc; color:#334155; font-size:13px; line-height:1.6; }
+    .cta { display:inline-block; margin-top:4px; padding:13px 20px; border-radius:5px; background:#0f4c81; color:#fff; font-size:14px; font-weight:bold; text-decoration:none; }
+    .footer { padding:20px 24px; background:#f8fafc; color:#64748b; font-size:12px; line-height:1.7; text-align:center; }
+    @media(max-width:480px) { body { padding:0; } .email { border-radius:0; } .content { padding:24px 18px; } h1 { font-size:22px; } }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f1f5f9;">
-<table border="0" cellpadding="0" cellspacing="0" class="outer-table" style="background-color: #f1f5f9; padding: 24px 0;" width="100%">
-<tr><td align="center">
-<table border="0" cellpadding="0" cellspacing="0" class="container" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 25px rgba(0,0,0,0.07);" width="600">
-<!-- 1. Header Banner -->
-<tr><td align="center" style="padding: 0;"><img alt="ISI Security Header Banner" src="../assets/H3.png" style="display:block;width:100%;max-width:600px;border:0;" width="600"/></td></tr>
-
-<!-- 2. Certification Highlight Bar -->
-<tr><td class="badge-bar" style="background: linear-gradient(90deg, #0f4c81 0%, #0f4c81dd 100%); padding: 11px 24px; text-align: center;">
-  <p style="font-size: 12px; color: #ffffff; margin: 0; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;">ISO 9001:2015 CERTIFIED | CARGO SECURITY & LOGISTICS FACILITY SPECIALISTS</p>
-</td></tr>
-
-<!-- 3. Headline & Narrative -->
-<tr>
-<td align="left" class="content-pad" style="padding: 36px 30px 16px 30px;">
-<h1 class="hero-h1" style="color: #0f4c81; font-size: 23px; margin: 0 0 16px 0; font-weight: 800; text-align: center; line-height: 32px; letter-spacing: -0.3px;">Smart Logistics Surveillance: Trailer ANPR, Thermal Perimeter AI & Loading Dock Analytics.</h1>
-<p class="salutation" style="font-size: 15px; line-height: 26px; color: #1e293b; margin: 0 0 18px 0; font-weight: 600;">Dear Chief Technology Officer & Head of Supply Chain Automation,</p>
-<p style="font-size: 14px; line-height: 24px; color: #475569; margin: 0 0 16px 0; text-align: left;">Managing a 30-acre logistics park with hundreds of parked trailers creates massive blind spots. Traditional stationary cameras cannot tell whether a driver is checking tire pressure or cutting a container lock in the dead of night. Modern logistics demands intelligent video analytics that trigger real-time alerts the second suspicious activity begins.</p>
-<p style="font-size: 14px; line-height: 24px; color: #475569; margin: 0 0 20px 0; text-align: left;"><strong>ISI Security’s Logistics Electronic Systems</strong> combine long-range trailer ANPR cameras, thermal perimeter sensors, high-bay warehouse AI, and 24/7 Command Center monitoring — giving your logistics leadership total visibility over every pallet and vehicle.</p>
-
-<div class="stat-box" style="background-color: #f0f6fb; border-left: 4px solid #0f4c81; padding: 14px 18px; margin: 0 0 14px 0; border-radius: 6px;">
-  <p style="font-size: 14px; color: #0f4c81; margin: 0; font-weight: bold; line-height: 20px;">📹 Long-Range Optical & Thermal Perimeter Radar</p>
-  <p style="font-size: 13.5px; color: #475569; margin: 6px 0 0 0; line-height: 21px; text-align: left;">High-definition thermal cameras detecting perimeter fence breaches, loitering along trailer yards, and unauthorized entry through unlit corners.</p>
-</div>
-
-<div class="stat-box" style="background-color: #f0f6fb; border-left: 4px solid #0f4c81; padding: 14px 18px; margin: 0 0 14px 0; border-radius: 6px;">
-  <p style="font-size: 14px; color: #0f4c81; margin: 0; font-weight: bold; line-height: 20px;">🚛 Automatic Number Plate Recognition (ANPR) at Entry</p>
-  <p style="font-size: 13.5px; color: #475569; margin: 6px 0 0 0; line-height: 21px; text-align: left;">High-speed ANPR cameras capturing freight vehicle license plates, matching against scheduled delivery lists, and opening boom barriers automatically.</p>
-</div>
-
-<div class="stat-box" style="background-color: #f0f6fb; border-left: 4px solid #0f4c81; padding: 14px 18px; margin: 0 0 14px 0; border-radius: 6px;">
-  <p style="font-size: 14px; color: #0f4c81; margin: 0; font-weight: bold; line-height: 20px;">📦 Loading Bay AI Motion & Overstay Analytics</p>
-  <p style="font-size: 13.5px; color: #475569; margin: 6px 0 0 0; line-height: 21px; text-align: left;">Smart cameras detecting unattended cargo pallets on open docks, unauthorized forklift speeding, and tailgating through warehouse shutters.</p>
-</div>
-</td>
-</tr>
-
-<!-- 4. Feature Cards -->
-<tr>
-<td align="center" class="content-pad" style="padding: 8px 30px 24px 30px;">
-
-<table border="0" cellpadding="0" cellspacing="0" width="100%" class="cards-table">
-  <tr>
-    <td class="cards-td">
-      <table align="left" border="0" cellpadding="0" cellspacing="0" class="card" style="background-color: #f0f6fb; border-radius: 8px; border: 1px solid #c8dfef;" width="48%">
-        <tr>
-          <td align="center" class="card-inner-td" style="padding: 22px 18px;">
-            <div style="font-size: 32px; margin-bottom: 12px;">🌡️</div>
-            <h3 style="font-size: 15px; color: #0f4c81; margin: 0 0 8px 0; font-weight: bold; text-align: center;">Cold Storage & Temperature Sensor Alerts</h3>
-            <p style="font-size: 13px; color: #475569; line-height: 20px; margin: 0; text-align: left;">Integrating thermal sensors in refrigerated storage zones to immediately alert facility teams if door seals fail or temperatures spike.</p>
-          </td>
-        </tr>
-      </table>
-      <table align="right" border="0" cellpadding="0" cellspacing="0" class="card" style="background-color: #f0f6fb; border-radius: 8px; border: 1px solid #c8dfef;" width="48%">
-        <tr>
-          <td align="center" class="card-inner-td" style="padding: 22px 18px;">
-            <div style="font-size: 32px; margin-bottom: 12px;">🖥️</div>
-            <h3 style="font-size: 15px; color: #0f4c81; margin: 0 0 8px 0; font-weight: bold; text-align: center;">Central Command Center (SOC) Cloud Uplink</h3>
-            <p style="font-size: 13px; color: #475569; line-height: 20px; margin: 0; text-align: left;">Live multi-hub video surveillance with 24/7 central dispatcher escalation to local police and hub managers within 60 seconds of a threat.</p>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-</td>
-</tr>
-
-
-<tr>
-  <td align="left" class="content-pad faq-section" style="padding: 22px 30px; background-color: #ffffff; border-top: 1px solid #e2e8f0;">
-    <h3 class="faq-title" style="color: #0f4c81; font-size: 16.5px; margin: 0 0 14px 0; font-weight: bold; text-align: center;">Frequently Asked Operational Questions</h3>
-    
-    <details class="faq-details" style="margin-bottom: 10px; border: 1px solid #c8dfef; border-radius: 6px; padding: 12px 16px; background-color: #fafbfc;">
-      <summary style="font-weight: 700; font-size: 13px; cursor: pointer; color: #0f4c81; outline: none;">Can this camera system track a specific carton or pallet if lost during sorting?</summary>
-      <p style="margin: 8px 0 0 0; font-size: 13px; color: #475569; line-height: 20px; text-align: left;">Yes. With synchronized high-definition cameras mapped to sorting conveyors and dock bays, we can trace any barcoded pallet’s timeline in minutes.</p>
-    </details>
-  </td>
-</tr>
-
-<!-- 5. CTA Section -->
-<tr>
-<td align="center" class="content-pad" style="padding: 10px 30px 36px 30px; background-color: #ffffff;">
-<p style="font-size: 14px; line-height: 24px; color: #334155; margin: 0 0 22px 0; text-align: center; font-weight: 500;">Turn your warehouse into an intelligent, transparent, and theft-proof supply chain node.</p>
-<table border="0" cellpadding="0" cellspacing="0" class="btn-table" style="margin: 0 auto; width: 100%; max-width: 500px;">
-<tr>
-<td align="center" class="btn-td" bgcolor="#0f4c81" style="border-radius: 6px;"><a class="btn" href="https://www.isisecurity.in" style="display: inline-block; padding: 13px 24px; font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 14px; color: #ffffff; text-decoration: none; font-weight: 700; border-radius: 6px; letter-spacing: 0.3px;" target="_blank">Explore Logistics Electronic Security</a></td>
-<td class="btn-spacer" width="14"></td>
-<td align="center" class="btn-td" bgcolor="#15803d" style="border-radius: 6px;"><a class="btn" href="https://wa.me/917708887878?text=Hello%20ISI%20Security!%20I%20want%20to%20explore%20AI%20yard%20surveillance%2C%20ANPR%20camera%20systems%2C%20and%20electronic%20security%20for%20our%20logistics%20park." style="display: inline-block; padding: 13px 22px; font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 14px; color: #ffffff; text-decoration: none; font-weight: 700; border-radius: 6px; letter-spacing: 0.3px;" target="_blank">WhatsApp Us Now</a></td>
-</tr>
-</table>
-</td>
-</tr>
-
-<!-- 6. Verified Company Details -->
-<tr>
-<td align="center" class="footer-cell" style="padding: 24px 20px; background-color: #f8fafc; border-top: 2px solid #e2e8f0;">
-<p style="font-size: 14px; color: #0f4c81; margin: 0 0 6px 0; font-weight: 800; letter-spacing: 0.3px;">Industrial Security &amp; Intelligence (I) Pvt. Ltd.</p>
-<p style="font-size: 12px; color: #64748b; margin: 0 0 8px 0; line-height: 18px;">
-  Your Safety. Our Priority. &nbsp;|&nbsp; ISO 9001:2015 Enterprise &nbsp;|&nbsp; 30+ Years of Excellence<br/>
-  No. 9, First Floor, Kamarajar Salai, Ashok Nagar, Chennai – 600083<br/>
-  <a href="https://www.isisecurity.in" style="color: #0f4c81; text-decoration: none; font-weight: 700;">www.isisecurity.in</a> &nbsp;|&nbsp; 
-  <a href="tel:+917708887878" style="color: #0f4c81; text-decoration: none; font-weight: 600;">+91 77088 87878</a>
-</p>
-</td>
-</tr>
-
-<!-- 7. Footer Banner -->
-<tr><td align="center" style="padding: 12px 0 20px 0;"><img alt="ISI Security Footer Details" src="../assets/f3.png" style="display:block;width:100%;max-width:600px;border:0;" width="600"/></td></tr>
-</table>
-</td></tr>
-</table>
+<body>
+  <table role="presentation" class="email" cellpadding="0" cellspacing="0" border="0">
+    <tr><td><img src="../assets/H1.png" alt="ISI Security" width="600" style="display:block;width:100%;height:auto;border:0"></td></tr>
+    <tr><td class="content">
+      <p class="label">Warehouse, distribution, and supply-chain operations</p>
+      <h1>Reviewing Security Alerts</h1>
+      <p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">Distribution sites coordinate vehicle arrivals, contractor access, loading areas, and inventory movement.</p>
+<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">Gaps in gate checks or shift handovers can make site activity harder to reconcile. Alerts are most useful when the right person can review and route them through a clear response process.</p>
+<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">A useful impact measure is gate exceptions and incident response time; reviewing your own baseline can help show where attention is needed without assuming a result.</p>
+<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">If a site review, renewal, or planning cycle is approaching, it can be a practical time to revisit these controls.</p>
+<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">Would a short discussion about your alert-review process be useful?</p>
+      <div class="kpi"><strong>Impact measure to review:</strong> gate exceptions and incident response time</div>
+      <a class="cta" href="mailto:info@isisecurity.in?subject=Reviewing%20Security%20Alerts%20%7C%20ISI%20Security">Reply to discuss site priorities</a>
+      <p style="margin:14px 0 0;color:#64748b;font-size:12px;">Prefer WhatsApp? <a href="https://wa.me/917708887878?text=Hello%20ISI%20Security%2C%20I%20would%20like%20to%20discuss%20CCTV%20monitoring%2C%20access%20controls%2C%20and%20incident%20escalation%20for%20your%20distribution%20sites." style="color:#0f4c81;">Ask a quick question</a>.</p>
+    </td></tr>
+    <tr><td class="footer">
+      <strong style="color:#0f4c81;">Industrial Security &amp; Intelligence (I) Pvt. Ltd.</strong><br>
+      CCTV monitoring, access controls, and incident escalation<br>
+      <a href="https://www.isisecurity.in" style="color:#0f4c81;">isisecurity.in</a> &nbsp;|&nbsp; +91 77088 87878
+    </td></tr>
+  </table>
 </body>
 </html>

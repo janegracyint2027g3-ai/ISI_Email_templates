@@ -5,6 +5,7 @@
   "main": "index.html",
   "scripts": {
     "build-index": "node build-index.js",
+    "refine-templates": "node refine-customer-templates.js",
     "deploy": "node deploy.js",
     "preview": "npx serve ."
   },

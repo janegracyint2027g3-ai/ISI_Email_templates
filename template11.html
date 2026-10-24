@@ -1,121 +1,42 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Security Advisory: Identifying Blind Spots in Corporate Facility Perimeters | ISI Security</title>
-<style type="text/css">
-  body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-  table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-  img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
-  table { border-collapse: collapse !important; }
-  body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; font-family: 'Georgia', serif; background-color: #fafafa; }
-  
-  @media screen and (max-width: 600px) {
-    .container { width: 100% !important; padding: 0 !important; border: none !important; }
-    .content-pad { padding: 40px 25px !important; }
-    .btn { display: block !important; width: 100% !important; box-sizing: border-box !important; text-align: center !important; }
-  }
-</style>
-<style>
-  /* Premium Enhancements */
-  .container {
-    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-  }
-  .container:hover {
-    box-shadow: 0 15px 40px rgba(0,0,0,0.12) !important;
-  }
-  h1, h2, h3 {
-    text-shadow: 0 1px 1px rgba(0,0,0,0.02) !important;
-  }
-  .btn {
-    transition: background-color 0.3s ease, transform 0.2s ease !important;
-  }
-  .btn:hover {
-    transform: translateY(-2px) !important;
-    filter: brightness(110%) !important;
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reviewing Site Incident Readiness for enterprise operations, security, and facilities.">
+  <title>Reviewing Site Incident Readiness | ISI Security</title>
+  <style>
+    body { margin:0; padding:24px 12px; background:#f1f5f9; font-family:Arial,Helvetica,sans-serif; color:#1e293b; }
+    .email { width:100%; max-width:600px; margin:0 auto; background:#fff; border-radius:10px; overflow:hidden; }
+    .content { padding:28px 32px; }
+    .label { color:#123b63; font-size:12px; font-weight:bold; letter-spacing:.5px; text-transform:uppercase; margin:0 0 12px; }
+    h1 { margin:0 0 18px; color:#123b63; font-size:25px; line-height:1.3; }
+    .kpi { margin:18px 0; padding:14px 16px; border-left:4px solid #123b63; background:#f8fafc; color:#334155; font-size:13px; line-height:1.6; }
+    .cta { display:inline-block; margin-top:4px; padding:13px 20px; border-radius:5px; background:#123b63; color:#fff; font-size:14px; font-weight:bold; text-decoration:none; }
+    .footer { padding:20px 24px; background:#f8fafc; color:#64748b; font-size:12px; line-height:1.7; text-align:center; }
+    @media(max-width:480px) { body { padding:0; } .email { border-radius:0; } .content { padding:24px 18px; } h1 { font-size:22px; } }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #fafafa;">
-<table border="0" cellpadding="0" cellspacing="0" style="background-color: #fafafa; padding: 40px 0;" width="100%">
-<tr>
-<td align="center">
-<table border="0" cellpadding="0" cellspacing="0" class="container" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #eaeaea; box-shadow: 0 10px 30px rgba(0,0,0,0.03);" width="600">
-<!-- Header Banner -->
-<tr><td align="center" style="padding: 0;"><tr><td><img alt="Header Banner" src="assets/H1.png" style="display:block;width:100%;max-width:600px;border:0;" width="600"/></td></tr></td></tr>
-<!-- Executive Letter Content -->
-<tr>
-<td align="left" class="content-pad" style="padding: 50px 50px 30px 50px;">
-<!-- Personal Greeting -->
-<p style="font-size: 16px; line-height: 26px; color: #333333; margin: 0 0 20px 0; text-align: justify;">Dear Facilities Director & Operations Head,</p>
-<!-- Executive Letter -->
-<p style="font-size: 16px; line-height: 28px; color: #333333; margin: 0 0 20px 0; text-align: justify;">
-              As leaders, we are tasked with not just guiding our enterprises toward growth, but fiercely protecting the assets, people, and data that make that growth possible.
-            </p>
-<p style="font-size: 16px; line-height: 28px; color: #333333; margin: 0 0 20px 0; text-align: justify;">
-              In today's fast-paced corporate environment, securing assets, data, and personnel is a strategic necessity. Having served the industry for over 30 years, we understand the specific security nuances required to protect complex corporate ecosystems.
-            </p>
-<p style="font-size: 16px; line-height: 28px; color: #333333; margin: 0 0 25px 0; text-align: justify;">
-              Modern operational environments present a complex array of security challenges. Relying on legacy systems or standard gatekeeping protocols often leaves key vulnerabilities exposed to modern threats. At Industrial Security &amp; Intelligence (I) Pvt. Ltd., we have spent decades engineering security models that do not just react to threats, but anticipate them. By partnering with us, you aren't just hiring guards; you are integrating a comprehensive intelligence network into your organization.
-            </p>
-<!-- Business Benefits -->
-<table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 30px; background-color: #f9f9f9; padding: 25px; border-left: 3px solid #003366;" width="100%">
-<tr>
-<td style="font-family: 'Arial', sans-serif; font-size: 14px; line-height: 24px; color: #444444;">
-<strong style="color: #003366;">The Strategic Advantage:</strong><br/><br/>
-                  • <strong>Risk Mitigation:</strong> Proactive identification of vulnerabilities before they are exploited.<br/>
-                  • <strong>Operational Continuity:</strong> Ensuring your business runs uninterrupted, regardless of external circumstances.<br/>
-                  • <strong>Brand Protection:</strong> Safeguarding your reputation by maintaining strict compliance and physical security protocols.
-                </td>
-</tr>
-</table>
-<p style="font-size: 16px; line-height: 28px; color: #333333; margin: 0 0 30px 0; text-align: justify;">
-              I would welcome the opportunity to discuss your specific security architecture and how we can elevate your corporate defense strategy.
-            </p>
-<!-- Signature -->
-<p style="font-size: 16px; line-height: 24px; color: #333333; margin: 0; text-align: justify;">
-              Sincerely,
-            </p>
-<p style="margin: 15px 0; text-align: justify;">
-<!-- Placeholder for a signature image, using text for now -->
-<span style="font-family: 'Brush Script MT', cursive; font-size: 24px; color: #003366;">Executive Team</span>
-</p>
-<p style="font-family: 'Arial', sans-serif; font-size: 12px; color: #777777; margin: 0; text-align: justify;">
-              Leadership<br/>
-              Industrial Security &amp; Intelligence (I) Pvt. Ltd.
-            </p>
-</td>
-</tr>
-<!-- CTA Section -->
-<tr>
-<td align="center" class="content-pad" style="padding: 10px 50px 50px 50px;">
-<p style="font-family: 'Arial', sans-serif; font-size: 14px; line-height: 24px; color: #666666; margin: 0 0 25px 0; text-align: justify;">We would be delighted to analyze your current security deployment and share a custom, zero-obligation proposal tailored to your operations. Let's schedule a brief discussion this week.</p>
-<table border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
-<tr>
-<td align="center" bgcolor="#003366" style="border-radius: 4px;"><a class="btn" href="https://www.isisecurity.in/contact" style="display: inline-block; padding: 16px 32px; font-family: Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; font-weight: bold; border-radius: 4px;" target="_blank">Contact Us</a></td>
-<td width="20"></td>
-<td align="center" bgcolor="#25D366" style="border-radius: 4px;"><a class="btn" href="https://wa.me/917708887878?text=Hello%20ISI%20Security!%20I%20would%20like%20to%20book%20a%20confidential%20perimeter%20gap%20assessment%20for%20our%20facility." style="display: inline-block; padding: 16px 32px; font-family: Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; font-weight: bold; border-radius: 4px;" target="_blank">WhatsApp Us</a></td>
-</tr>
-</table>
-</td>
-</tr>
-<!-- Footer Banner -->
-<tr><td align="center" style="padding: 0;"><tr><td align="center" style="padding:16px 0 24px 0;"><img alt="ISI Security Head Office &amp; Contact Details" src="assets/f4.png" style="display:block;width:100%;max-width:600px;border:0;" width="600"/></td></tr></td></tr>
-</table>
-<!-- Minimal Footer Info -->
-<table border="0" cellpadding="0" cellspacing="0" class="container" width="600">
-<tr>
-<td align="center" style="padding: 20px; font-family: 'Arial', sans-serif; font-size: 11px; color: #aaaaaa; line-height: 18px;">
-            Industrial Security &amp; Intelligence (I) Pvt. Ltd. • Your Safety. Our Priority.<br/>
-            CONFIDENTIAL COMMUNICATION: This email is intended solely for Valued Partner.<br/>
-<a href="#" style="color: #aaaaaa; text-decoration: underline;">Unsubscribe</a> from executive communications.
-          </td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
+<body>
+  <table role="presentation" class="email" cellpadding="0" cellspacing="0" border="0">
+    <tr><td><img src="assets/H1.png" alt="ISI Security" width="600" style="display:block;width:100%;height:auto;border:0"></td></tr>
+    <tr><td class="content">
+      <p class="label">Enterprise operations, security, and facilities</p>
+      <h1>Reviewing Site Incident Readiness</h1>
+      <p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">For multi-site organizations, consistent site routines help teams coordinate people, assets, and daily operations.</p>
+<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">If escalation roles are unclear, operations teams may find incidents harder to coordinate.</p>
+<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">A useful impact measure is incident response time and escalation exceptions; reviewing your own baseline can help show where attention is needed without assuming a result.</p>
+<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">If a site review, renewal, or planning cycle is approaching, it can be a practical time to revisit these controls.</p>
+<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">Would a short discussion about your escalation process be useful?</p>
+      <div class="kpi"><strong>Impact measure to review:</strong> incident response time and escalation exceptions</div>
+      <a class="cta" href="mailto:info@isisecurity.in?subject=Reviewing%20Site%20Incident%20Readiness%20%7C%20ISI%20Security">Reply to discuss site priorities</a>
+      <p style="margin:14px 0 0;color:#64748b;font-size:12px;">Prefer WhatsApp? <a href="https://wa.me/917708887878?text=Hello%20ISI%20Security%2C%20I%20would%20like%20to%20discuss%20incident%20escalation%2C%20access%20procedures%2C%20and%20response%20ownership%20for%20your%20sites." style="color:#123b63;">Ask a quick question</a>.</p>
+    </td></tr>
+    <tr><td class="footer">
+      <strong style="color:#123b63;">Industrial Security &amp; Intelligence (I) Pvt. Ltd.</strong><br>
+      incident escalation, access procedures, and response ownership<br>
+      <a href="https://www.isisecurity.in" style="color:#123b63;">isisecurity.in</a> &nbsp;|&nbsp; +91 77088 87878
+    </td></tr>
+  </table>
 </body>
 </html>
