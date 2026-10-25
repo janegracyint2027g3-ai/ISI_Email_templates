@@ -561,8 +561,118 @@ function upgradeSpicedTemplate(filePath) {
   const reply = `<p style="margin:0 0 14px;color:#475569;font-size:13px;line-height:1.6;">Reply with your upcoming trigger and a preferred time; we will tailor the discussion to your sites.</p>`;
 
   let updated = `${original.slice(0, contentStart)}${makeSpicedBody(copy)}\n      ${updatedCta}\n      ${reply}\n      ${whatsApp}\n    </td></tr>\n    ${original.slice(footerIndex)}`;
-  if (!updated.includes(".spiced-callout {")) {
-    updated = updated.replace(/(<style\b[^>]*>)/i, `$1${spicedStyles}`);
+  const duplicateStyles = /\s*\.spiced-kicker\s*\{[^}]*\}\s*\.spiced-callout,\s*\.spiced-outcome\s*\{[^}]*\}\s*\.spiced-outcome\s*\{[^}]*\}\s*\.spiced-copy\s*\{[^}]*\}/g;
+  updated = updated.replace(duplicateStyles, "");
+  updated = updated.replace(/(<style\b[^>]*>)/i, `$1${spicedStyles}`);
+  fs.writeFileSync(filePath, updated, "utf8");
+}
+
+const bankingSubjects = {
+  template_comprehensive: "Branch review: who owns security exceptions?",
+  template_physical_security: "Audit readiness: four measures for branches",
+  template_electronic_security: "Does branch practice match policy?",
+  template_facility_management: "Who owns security exception follow-up?",
+  template_event_security: "Before vendor renewal: review branch governance",
+};
+
+function upgradeBankingTemplate(filePath) {
+  const original = fs.readFileSync(filePath, "utf8");
+  const template = path.basename(filePath, ".html");
+  const subject = bankingSubjects[template];
+  const greeting = /<p class="salutation"[^>]*>[\s\S]*?<\/p>/i.exec(original);
+  const footerIndex = original.indexOf('<tr><td class="footer">');
+  const cta = /<a class="cta" href="mailto:[^"]+"[^>]*>[\s\S]*?<\/a>/i.exec(original);
+  if (!subject || !greeting || footerIndex < 0 || !cta) {
+    throw new Error(`${path.relative(__dirname, filePath)} is missing banking template structure.`);
+  }
+
+  const ctaLabel = "Get a 20-minute branch-readiness review";
+  const ctaHref = 'mailto:info@isisecurity.in?subject=Request%3A%2020-minute%20branch-readiness%20review&amp;body=Hello%20ISI%20team%2C%0A%0AI%27d%20like%20to%20request%20a%2020-minute%20branch-readiness%20review.%0A%0AOur%20upcoming%20trigger%20is%3A%20%5Bbranch%20review%20%2F%20audit%20%2F%20renewal%20%2F%20other%5D%0APreferred%20time%3A%20%5Bdate%20and%20time%5D%0A%0ARegards%2C';
+  const body = `
+      <p class="spiced-kicker">SITUATION</p>
+      <p class="spiced-copy">Banking leaders oversee security governance across branches, ATMs, offices and cash-handling locations—often involving multiple teams, vendors and shifts.</p>
+      <table role="presentation" class="spiced-callout" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:16px 0;border:1px solid #d8e5f2;border-left:4px solid #1769aa;border-collapse:separate;background:#f3f8fd;">
+        <tr><td style="padding:15px 17px;">
+          <p style="margin:0 0 6px;color:#174a78;font-size:11px;font-weight:bold;letter-spacing:.7px;text-transform:uppercase;">The governance gap: policy versus branch practice</p>
+          <p style="margin:0;color:#334155;font-size:14px;line-height:1.65;"><strong style="color:#0b2545;">PAIN</strong> A documented control does not always show whether exceptions were logged, assigned, escalated and closed consistently. <strong style="color:#0b2545;">IMPACT</strong> Unclear ownership can delay investigations, fragment reporting and surface audit or compliance gaps.</p>
+        </td></tr>
+      </table>
+      <p class="spiced-kicker">TRIGGER EVENT</p>
+      <p class="spiced-copy">An upcoming branch review, audit, compliance assessment, vendor renewal or expansion is a practical moment to test whether records and execution align.</p>
+      <p class="spiced-kicker">DECISION CRITERIA</p>
+      <p class="spiced-copy">Review exception ownership and closure by location; incident-report completeness and evidence; handover and escalation timeliness; and repeat findings or overdue actions. Compare results with your internal requirements rather than assuming every branch needs identical controls.</p>
+      <p class="spiced-kicker">TAKEAWAYS: FOUR USEFUL OUTPUTS</p>
+      <table role="presentation" class="stat-cards" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:12px 0 20px;table-layout:fixed;border-spacing:8px 0;">
+        <tr>
+          <td class="stat-card-column" width="33.33%" style="width:33.33%;padding:0;vertical-align:top;">
+            <div class="stat-card" style="height:100%;padding:15px 13px;border:1px solid #dbe5ef;border-top:3px solid #1769aa;border-radius:10px;background:#f8fafc;color:#334155;font-size:12px;line-height:1.6;">
+              <p class="stat-card-label" style="margin:0 0 8px;color:#174a78;font-size:10px;font-weight:bold;letter-spacing:.6px;text-transform:uppercase;">01 Visibility</p>
+              <p class="stat-card-copy" style="margin:0;color:#475569;font-size:12px;line-height:1.6;">Measures to compare across locations</p>
+            </div>
+          </td>
+          <td class="stat-card-column" width="33.33%" style="width:33.33%;padding:0;vertical-align:top;">
+            <div class="stat-card" style="height:100%;padding:15px 13px;border:1px solid #dbe5ef;border-top:3px solid #1769aa;border-radius:10px;background:#f8fafc;color:#334155;font-size:12px;line-height:1.6;">
+              <p class="stat-card-label" style="margin:0 0 8px;color:#174a78;font-size:10px;font-weight:bold;letter-spacing:.6px;text-transform:uppercase;">02 Accountability</p>
+              <p class="stat-card-copy" style="margin:0;color:#475569;font-size:12px;line-height:1.6;">Owners for exceptions and follow-up</p>
+            </div>
+          </td>
+          <td class="stat-card-column" width="33.33%" style="width:33.33%;padding:0;vertical-align:top;">
+            <div class="stat-card" style="height:100%;padding:15px 13px;border:1px solid #dbe5ef;border-top:3px solid #0b2545;border-radius:10px;background:#f1f6fb;color:#334155;font-size:12px;line-height:1.6;">
+              <p class="stat-card-label" style="margin:0 0 8px;color:#174a78;font-size:10px;font-weight:bold;letter-spacing:.6px;text-transform:uppercase;">03 Readiness</p>
+              <p class="stat-card-copy" style="margin:0;color:#475569;font-size:12px;line-height:1.6;">Prioritized checks before the trigger</p>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <table role="presentation" class="spiced-outcome" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:16px 0;border:1px solid #d8e5f2;border-left:4px solid #0b2545;border-collapse:separate;background:#f5f8fb;">
+        <tr><td style="padding:15px 17px;">
+          <p style="margin:0 0 6px;color:#174a78;font-size:11px;font-weight:bold;letter-spacing:.7px;text-transform:uppercase;">A practical review can leave you with</p>
+          <p style="margin:0;color:#334155;font-size:14px;line-height:1.75;">&bull; A short list of priority gaps<br>&bull; Measures for branch-level visibility<br>&bull; Clear owners for exception follow-up<br>&bull; Next checks aligned to audit and operating needs</p>
+        </td></tr>
+      </table>
+      <p class="spiced-copy"><strong style="color:#0b2545;">A trusted security and governance partner since 1985</strong>, ISI brings a practical, review-led perspective focused on accountability, evidence and operational alignment.</p>
+      <a class="cta" href="${ctaHref}" style="display:inline-block;margin:2px 0 16px;padding:13px 20px;border-radius:7px;background:#1a3c6e;color:#ffffff;font-size:14px;font-weight:bold;line-height:1.4;text-decoration:none;">${ctaLabel}</a>
+      <p style="margin:0 0 14px;color:#475569;font-size:13px;line-height:1.6;">Reply with the review or renewal you are planning for and a preferred time; we will focus on your governance priorities.</p>
+      <p style="margin:14px 0 0;color:#64748b;font-size:12px;">Prefer WhatsApp? <a href="https://wa.me/917708887878?text=Hello%20ISI%20Security%2C%20I%20would%20like%20to%20discuss%20a%20branch-readiness%20review." style="color:#1a3c6e;">Ask a quick question</a>.</p>
+    </td></tr>
+    `;
+
+  let updated = original.replace(
+    /<!-- SUBJECT: .*? -->/,
+    `<!-- SUBJECT: ${subject} -->`
+  );
+  updated = updated.replace(
+    /<meta name="description" content="[^"]*">/,
+    '<meta name="description" content="A practical branch security governance review for banking operations, security, risk and compliance leaders.">'
+  );
+  updated = updated.replace(
+    /<title>[\s\S]*?<\/title>/i,
+    `<title>${escapeHtml(subject)} | ISI Security</title>`
+  );
+  updated = updated.replace(
+    /(<div class="preheader"[^>]*>)[\s\S]*?(<\/div>)/i,
+    "$1Prepare for your next branch review with four practical measures for exception ownership, reporting and audit readiness. &#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;$2"
+  );
+  updated = updated.replace(
+    /(<p class="label"[^>]*>)[\s\S]*?(<\/p>)/i,
+    "$1Banking security governance &amp; operations$2"
+  );
+  updated = updated.replace(
+    /(<h1\b[^>]*>)[\s\S]*?(<\/h1>)/i,
+    "$1Branch Security: Is Policy Reflected in Practice?$2"
+  );
+  updated = updated.replace(
+    /(<p class="salutation"[^>]*>)[\s\S]*?(<\/p>)/i,
+    "$1Dear Banking Operations, Security, Risk &amp; Compliance Leaders,$2"
+  );
+  const updatedGreeting = /<p class="salutation"[^>]*>[\s\S]*?<\/p>/i.exec(updated);
+  const updatedFooterIndex = updated.indexOf('<tr><td class="footer">');
+  if (!updatedGreeting || updatedFooterIndex < 0) {
+    throw new Error(`Unable to locate updated body in ${path.relative(__dirname, filePath)}.`);
+  }
+  updated = `${updated.slice(0, updatedGreeting.index + updatedGreeting[0].length)}${body}${updated.slice(updatedFooterIndex)}`;
+  if (!updated.includes("A trusted security and governance partner since 1985")) {
+    throw new Error(`Failed to update banking copy in ${path.relative(__dirname, filePath)}.`);
   }
   fs.writeFileSync(filePath, updated, "utf8");
 }
@@ -588,4 +698,9 @@ function listTemplateFiles() {
 const files = listTemplateFiles();
 const remainingFiles = files.filter((file) => file !== path.join(__dirname, "template1.html"));
 for (const file of remainingFiles) upgradeSpicedTemplate(file);
+for (const file of remainingFiles) {
+  if (path.basename(path.dirname(file)) === "bfsi_industry") {
+    upgradeBankingTemplate(file);
+  }
+}
 console.log(`Expanded SPICED email content in ${remainingFiles.length} templates.`);
