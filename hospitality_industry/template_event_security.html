@@ -1,3 +1,4 @@
+<!-- SUBJECT: Hospitality: Review event security -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,6 +7,39 @@
   <meta name="description" content="Planning for Event Readiness for hotel, venue, and guest-operations.">
   <title>Planning for Event Readiness | ISI Security</title>
   <style>
+    .spiced-kicker { margin:18px 0 7px; color:#174a78; font-size:11px; font-weight:bold; letter-spacing:.8px; text-transform:uppercase; }
+    .spiced-callout, .spiced-outcome { width:100%; margin:16px 0; border:1px solid #d8e5f2; border-left:4px solid #1769aa; border-collapse:separate; background:#f3f8fd; }
+    .spiced-outcome { border-left-color:#0b2545; background:#f5f8fb; }
+    .spiced-copy { margin:0 0 14px; color:#334155; font-size:15px; line-height:1.7; }
+
+    .spiced-kicker { margin:18px 0 7px; color:#174a78; font-size:11px; font-weight:bold; letter-spacing:.8px; text-transform:uppercase; }
+    .spiced-callout, .spiced-outcome { width:100%; margin:16px 0; border:1px solid #d8e5f2; border-left:4px solid #1769aa; border-collapse:separate; background:#f3f8fd; }
+    .spiced-outcome { border-left-color:#0b2545; background:#f5f8fb; }
+    .spiced-copy { margin:0 0 14px; color:#334155; font-size:15px; line-height:1.7; }
+
+    .spiced-kicker { margin:18px 0 7px; color:#174a78; font-size:11px; font-weight:bold; letter-spacing:.8px; text-transform:uppercase; }
+    .spiced-callout, .spiced-outcome { width:100%; margin:16px 0; border:1px solid #d8e5f2; border-left:4px solid #1769aa; border-collapse:separate; background:#f3f8fd; }
+    .spiced-outcome { border-left-color:#0b2545; background:#f5f8fb; }
+    .spiced-copy { margin:0 0 14px; color:#334155; font-size:15px; line-height:1.7; }
+
+    .salutation { margin:0 0 16px; color:#1e293b; font-size:15px; font-weight:bold; line-height:1.6; }
+    .stat-cards { width:100%; margin:18px 0 24px; table-layout:fixed; border-spacing:8px 0; }
+    .stat-card-column { width:33.33%; padding:0; vertical-align:top; }
+    .stat-card {
+      height:100%; padding:16px 14px; border:1px solid #dbe5ef; border-top:3px solid #0b2545;
+      border-radius:10px; background:#f8fafc; box-shadow:0 5px 16px rgba(15,37,69,.07);
+      color:#334155; font-size:12px; line-height:1.6; vertical-align:top;
+    }
+    .stat-card-label { margin:0 0 8px; color:#0b2545; font-size:11px; font-weight:bold; letter-spacing:.6px; text-transform:uppercase; }
+    .stat-card-copy { margin:0; color:#475569; font-size:12px; line-height:1.6; }
+    .stat-cards .kpi { height:100%; margin:0; padding:16px 14px; border:1px solid #dbe5ef; border-top:3px solid #0b2545; border-left:1px solid #dbe5ef; border-radius:10px; background:#f8fafc; box-shadow:0 5px 16px rgba(15,37,69,.07); color:#475569; font-size:12px; line-height:1.6; vertical-align:top; }
+    .stat-cards .kpi strong { display:block; margin:0 0 8px; color:#0b2545; font-size:11px; letter-spacing:.6px; text-transform:uppercase; }
+    @media(max-width:560px) {
+      .stat-cards, .stat-cards tbody, .stat-cards tr, .stat-card-column { display:block !important; width:100% !important; box-sizing:border-box; }
+      .stat-card-column { padding:0 0 10px !important; }
+      .stat-card, .stat-cards .kpi { height:auto; }
+    }
+
     body { margin:0; padding:24px 12px; background:#f1f5f9; font-family:Arial,Helvetica,sans-serif; color:#1e293b; }
     .email { width:100%; max-width:600px; margin:0 auto; background:#fff; border-radius:10px; overflow:hidden; }
     .content { padding:28px 32px; }
@@ -15,21 +49,91 @@
     .cta { display:inline-block; margin-top:4px; padding:13px 20px; border-radius:5px; background:#7b3f00; color:#fff; font-size:14px; font-weight:bold; text-decoration:none; }
     .footer { padding:20px 24px; background:#f8fafc; color:#64748b; font-size:12px; line-height:1.7; text-align:center; }
     @media(max-width:480px) { body { padding:0; } .email { border-radius:0; } .content { padding:24px 18px; } h1 { font-size:22px; } }
-  </style>
+  
+  .stat-card-column {
+    padding:0 !important;
+    border:1px solid #dbe5ef !important;
+    border-radius:10px !important;
+    background:#f8fafc !important;
+    box-shadow:0 5px 16px rgba(15,37,69,.07) !important;
+    vertical-align:top !important;
+  }
+  .stat-card {
+    height:auto !important;
+    border-left:0 !important;
+    border-right:0 !important;
+    border-bottom:0 !important;
+    border-radius:10px 10px 0 0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+  .stat-cards .kpi {
+    height:auto !important;
+    border-left:0 !important;
+    border-right:0 !important;
+    border-bottom:0 !important;
+    border-radius:10px 10px 0 0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+  @media(max-width:560px) {
+    .stat-card-column { padding:0 !important; margin:0 0 10px !important; }
+    .stat-card-column:last-child { margin-bottom:0 !important; }
+  }
+
+</style>
 </head>
 <body>
+  <div class="preheader" style="display:none!important;visibility:hidden;opacity:0;color:transparent;height:0;width:0;max-height:0;max-width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;">Busy arrivals and changing venue requirements can make access roles and handovers harder to align. &#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;</div>
   <table role="presentation" class="email" cellpadding="0" cellspacing="0" border="0">
-    <tr><td><img src="../assets/H1.png" alt="ISI Security" width="600" style="display:block;width:100%;height:auto;border:0"></td></tr>
+    <tr><td><img src="../assets/email-H1.jpg" alt="ISI Security" width="600" height="200" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>
     <tr><td class="content">
       <p class="label">Hotel, venue, and guest-operations</p>
-      <h1>Planning for Event Readiness</h1>
-      <p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">Hospitality teams need guest-facing operations to run smoothly while managing staff, vendors, and event visitors.</p>
-<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">Busy arrival periods and inconsistent handovers can make it harder to keep service and site oversight aligned. When arrivals, venue access, and escalation roles are not aligned, event teams have more to coordinate in real time.</p>
-<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">A useful impact measure is incident response time and visitor access exceptions; reviewing your own baseline can help show where attention is needed without assuming a result.</p>
-<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">If a site review, renewal, or planning cycle is approaching, it can be a practical time to revisit these controls.</p>
-<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.7;">Would a brief exchange about your next event's access plan be useful?</p>
-      <div class="kpi"><strong>Impact measure to review:</strong> incident response time and visitor access exceptions</div>
-      <a class="cta" href="mailto:info@isisecurity.in?subject=Planning%20for%20Event%20Readiness%20%7C%20ISI%20Security">Reply to discuss site priorities</a>
+      <h1>Hospitality and venues: Event Security</h1>
+      <p class="salutation">Dear Hospitality Event Security and Operations Leaders,</p>
+      <p class="spiced-kicker">SITUATION</p>
+      <p class="spiced-copy">Hotels and venues coordinate guest movement alongside staff, suppliers and event access.</p>
+      <table role="presentation" class="spiced-callout" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:16px 0;border:1px solid #d8e5f2;border-left:4px solid #1769aa;border-collapse:separate;background:#f3f8fd;">
+        <tr><td style="padding:15px 17px;">
+          <p style="margin:0 0 6px;color:#174a78;font-size:11px;font-weight:bold;letter-spacing:.7px;text-transform:uppercase;">The gap between procedure and practice</p>
+          <p style="margin:0;color:#334155;font-size:14px;line-height:1.65;"><strong style="color:#0b2545;">PAIN</strong> Changes in arrivals, venue access or staffing can make event roles and incident coordination harder to align. <strong style="color:#0b2545;">IMPACT</strong> Unclear ownership may add work during incident follow-up and guest-service coordination.</p>
+        </td></tr>
+      </table>
+      <p class="spiced-kicker">CRITICAL EVENT</p>
+      <p class="spiced-copy">With an event calendar review, venue change or vendor renewal approaching, check whether current procedures, responsibilities and reporting still fit the way each site operates.</p>
+      <p class="spiced-kicker">DECISION CRITERIA</p>
+      <p class="spiced-copy">Compare measures such as visitor access exceptions and incident handover completeness with site requirements. Ensure the review covers event access, guest movement and incident coordination and names owners for exceptions and follow-up.</p>
+      <p class="spiced-kicker">Three checks to make the review practical</p>
+      <table role="presentation" class="stat-cards" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:12px 0 20px;table-layout:fixed;border-spacing:8px 0;">
+        <tr>
+          <td class="stat-card-column" width="33.33%" style="width:33.33%;padding:0;vertical-align:top;">
+            <div class="stat-card" style="height:100%;padding:15px 13px;border:1px solid #dbe5ef;border-top:3px solid #1769aa;border-radius:10px;background:#f8fafc;color:#334155;font-size:12px;line-height:1.6;">
+              <p class="stat-card-label" style="margin:0 0 8px;color:#174a78;font-size:10px;font-weight:bold;letter-spacing:.6px;text-transform:uppercase;">01 Scope</p>
+              <p class="stat-card-copy" style="margin:0;color:#475569;font-size:12px;line-height:1.6;">event access, guest movement and incident coordination</p>
+            </div>
+          </td>
+          <td class="stat-card-column" width="33.33%" style="width:33.33%;padding:0;vertical-align:top;">
+            <div class="stat-card" style="height:100%;padding:15px 13px;border:1px solid #dbe5ef;border-top:3px solid #1769aa;border-radius:10px;background:#f8fafc;color:#334155;font-size:12px;line-height:1.6;">
+              <p class="stat-card-label" style="margin:0 0 8px;color:#174a78;font-size:10px;font-weight:bold;letter-spacing:.6px;text-transform:uppercase;">02 Ownership</p>
+              <p class="stat-card-copy" style="margin:0;color:#475569;font-size:12px;line-height:1.6;">Escalation roles, handovers and exception follow-up</p>
+            </div>
+          </td>
+          <td class="stat-card-column" width="33.33%" style="width:33.33%;padding:0;vertical-align:top;">
+            <div class="stat-card" style="height:100%;padding:15px 13px;border:1px solid #dbe5ef;border-top:3px solid #0b2545;border-radius:10px;background:#f1f6fb;color:#334155;font-size:12px;line-height:1.6;">
+              <p class="stat-card-label" style="margin:0 0 8px;color:#174a78;font-size:10px;font-weight:bold;letter-spacing:.6px;text-transform:uppercase;">03 Measure</p>
+              <p class="stat-card-copy" style="margin:0;color:#475569;font-size:12px;line-height:1.6;">visitor access exceptions and incident handover completeness</p>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <table role="presentation" class="spiced-outcome" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:16px 0;border:1px solid #d8e5f2;border-left:4px solid #0b2545;border-collapse:separate;background:#f5f8fb;">
+        <tr><td style="padding:15px 17px;">
+          <p style="margin:0 0 6px;color:#174a78;font-size:11px;font-weight:bold;letter-spacing:.7px;text-transform:uppercase;">What you can take away</p>
+          <p style="margin:0;color:#334155;font-size:14px;line-height:1.65;">A focused 20-minute conversation to identify one priority, agree what to measure and outline practical next checks with owners—without presuming the outcome.</p>
+        </td></tr>
+      </table>
+      <a class="cta" href="mailto:info@isisecurity.in?subject=Hospitality%3A%20Review%20event%20security" style="display:inline-block;margin:2px 0 16px;padding:13px 20px;border-radius:7px;background:#7b3f00;color:#ffffff;font-size:14px;font-weight:bold;line-height:1.4;text-decoration:none;">Request a 20-minute event security review</a>
+      <p style="margin:0 0 14px;color:#475569;font-size:13px;line-height:1.6;">Reply with your upcoming trigger and a preferred time; we will tailor the discussion to your sites.</p>
       <p style="margin:14px 0 0;color:#64748b;font-size:12px;">Prefer WhatsApp? <a href="https://wa.me/917708887878?text=Hello%20ISI%20Security%2C%20I%20would%20like%20to%20discuss%20event%20access%2C%20guest%20movement%2C%20and%20incident%20coordination%20for%20your%20property%20or%20venue." style="color:#7b3f00;">Ask a quick question</a>.</p>
     </td></tr>
     <tr><td class="footer">
@@ -37,6 +141,7 @@
       event access, guest movement, and incident coordination<br>
       <a href="https://www.isisecurity.in" style="color:#7b3f00;">isisecurity.in</a> &nbsp;|&nbsp; +91 77088 87878
     </td></tr>
+    <tr><td align="center" style="padding:0;"><img src="../assets/email-f1.jpg" alt="ISI Security Footer Banner" width="600" height="200" style="display:block;width:100%;max-width:600px;height:auto;border:0;"></td></tr>
   </table>
 </body>
 </html>
